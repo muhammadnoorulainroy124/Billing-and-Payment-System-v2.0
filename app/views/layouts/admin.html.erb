@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BillingAndPaymentSystemV20</title>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'admin', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'admin', 'data-turbolinks-track': 'reload' %>
+
+
+    <!----===== Boxicons CSS ===== -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+  </head>
+
+  <body>
+    <div class="admin-content">
+      <%= render 'shared/admin_navbar' %>
+      <%= render 'shared/admin_sidebar'%>
+      <div style="position: absolute; top: 100px; left: 250px; height: 1000vh; width: calc(100% - 250px); background-color: var(--body-color);transition: var(--tran-05);">
+        <% flash.each do |type, msg| %>
+          <div class="alert alert-info">
+            <%= msg %>
+          </div>
+        <% end %>
+        <div class="alert alert-info"> <p id="notice"><%= notice %></p> </div>
+        <%= yield %>
+      </div>
+    </div>
+
+    <script>
+      var body = document.querySelector('body');
+      var sidebar = body.querySelector('nav');
+      var toggle = body.querySelector(".toggle");
+    </script>
+
+  </body>
+</html>

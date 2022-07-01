@@ -1,8 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100&display=swap');
-
+@import "bootstrap";
 *{
   font-family: 'Poppins', sans-serif;
 }
+.content{
+  background-image: url("bg.svg");
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  background-size: 30%;
+}
+body{
+  background-image: url("bg-2.jpg");
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-size: 30%;
+}
+
 .wrapper{
   display: flex;
   justify-content: center;

@@ -63,4 +63,6 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'jquery-rails'
 gem 'devise'
+gem 'devise_invitable', '~> 2.0.0'
 gem 'bootstrap', '~> 4.4.1'
+gem 'stripe'

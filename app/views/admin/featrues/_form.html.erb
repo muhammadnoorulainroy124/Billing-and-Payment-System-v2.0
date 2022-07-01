@@ -1,0 +1,56 @@
+
+
+<div class="container">
+  <div class="card" style="width:700px">
+    <div class="card-body">
+    <% if card == "update"%>
+      <h4 class="card-title">Updating Feature</h4>
+    <% else %>
+     <h4 class="card-title">Create New Feature</h4>
+    <% end %>
+        <%= form_with(model: [:admin, featrue], local: true) do |form| %>
+
+            <% if featrue.errors.any? %>
+            <div class="alert alert-danger">
+              <h5><%= pluralize(featrue.errors.count, "error") %> Error Occured</h5>
+
+              <ul>
+              <% featrue.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+              </ul>
+            </div>
+            <% end %>
+
+        <div class="form-group">
+          <%= form.label :name %>
+          <%= form.text_field :name, required: true, class:"form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :code %>
+          <%= form.number_field :code, required: true, class:"form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :unit_price %>
+          <%= form.text_field :unit_price, required: true, class:"form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :usage %>
+          <%= form.text_field :usage, required: true, class:"form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :max_unit_limit %>
+          <%= form.text_field :max_unit_limit, required: true, class:"form-control" %>
+        </div>
+
+        <div class="actions">
+          <%= form.submit class: 'btn btn-success'%>
+        </div>
+      <% end %>
+    </div>
+  </div>
+ </div>

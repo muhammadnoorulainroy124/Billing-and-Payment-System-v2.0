@@ -1,0 +1,2 @@
+module Admin::FeatruesHelper
+end

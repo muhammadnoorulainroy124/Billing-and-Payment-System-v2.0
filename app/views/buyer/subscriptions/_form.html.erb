@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="card" style="width:700px">
+    <div class="card-body">
+    <h4 class="card-title">Subscribe a Plan</h4>
+    <hr />
+        <%= form_with(model: [:buyer, subscription], url: buyer_subscriptions_path, local: true) do |form| %>
+        <% if subscription.errors.any? %>
+          <div>
+            <h2><%= pluralize(subscription.errors.count, "error") %> prohibited this subscription from being saved:</h2>
+
+            <ul>
+            <% subscription.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+       <div class="form-elements">
+
+        <div>
+          <h5>Following Plans are available for subscription</h5>
+          <hr />
+        </div>
+        <div class="form-group form-check">
+
+        <%= form.collection_check_boxes(:plan_id, get_not_subscribed_plans, :id, :name)%>
+
+        </div>
+       </div>
+        <% if is_available %>
+        <div class="actions">
+          <%= form.submit "Subscribe", class: 'btn btn-success'%>
+        </div>
+        <% end %>
+
+      <% end %>
+    </div>
+  </div>
+ </div>

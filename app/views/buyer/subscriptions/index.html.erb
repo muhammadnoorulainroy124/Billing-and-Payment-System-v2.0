@@ -1,0 +1,35 @@
+
+<section>
+
+  <div class="container">
+    <div class="card" style="width:700px">
+      <div class="card-body">
+      <h4 class="card-title">Subscribed Plans</h4>
+        <p id="notice"><%= notice %></p>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Monthly Charges</th>
+                <th colspan=2>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @buyer_plans.each do |plan| %>
+                <tr>
+                  <td><%= plan.name %></td>
+                  <td><%= plan.monthly_fee %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <br>
+  </div>
+  </div>
+  </div>
+
+</section>
