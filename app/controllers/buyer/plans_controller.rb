@@ -15,16 +15,6 @@ class Buyer::PlansController < ApplicationController
     end
   end
 
-    # @subscription = Subscription.new(subscription_params)
-    # if @subscription.save
-    #   flash[:success] = "Subscription successfully created"
-    #   redirect_to :new_buyer_plan_path
-    # else
-    #   flash[:error] = "Something went wrong"
-    #   render 'new'
-    # end
-  #end
-
   private
   def subscription_params
     params.permit(:subscription).permit(:billing_day, plan_ids:[])

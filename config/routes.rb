@@ -6,8 +6,6 @@ Rails.application.routes.draw do
     resources :plans
   end
 
-  resources :books
-
   scope :admin, as: "admin" do
     root 'admin/featrues#index'
   end
