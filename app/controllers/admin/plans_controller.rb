@@ -31,7 +31,7 @@ class Admin::PlansController < ApplicationController
         :name => params[:name],
         :currency => 'usd',
         :trial_plan => nil,
-        :product => 'prod_LyhxbwoxAidqpM'
+        :product => 'prod_LyhxbwoxAidqpM',
         :id => SecureRandom.uuid # This ensures that the plan is unique in stripe
       )
 

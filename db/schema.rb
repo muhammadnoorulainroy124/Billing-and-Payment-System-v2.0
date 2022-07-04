@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_30_200827) do
+ActiveRecord::Schema.define(version: 2022_07_03_121708) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -51,6 +51,27 @@ ActiveRecord::Schema.define(version: 2022_06_30_200827) do
     t.index ["name"], name: "index_plans_on_name", unique: true
   end
 
+  create_table "stripe_plans", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "interval"
+    t.integer "price_cents"
+    t.string "stripe_price_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "stripe_subscriptions", force: :cascade do |t|
+    t.bigint "stripe_plan_id"
+    t.bigint "user_id"
+    t.boolean "active", default: true
+    t.string "stripe_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stripe_plan_id"], name: "index_stripe_subscriptions_on_stripe_plan_id"
+    t.index ["user_id"], name: "index_stripe_subscriptions_on_user_id"
+  end
+
   create_table "subscriptions", force: :cascade do |t|
     t.bigint "buyer_id"
     t.bigint "plan_id"
@@ -79,6 +100,7 @@ ActiveRecord::Schema.define(version: 2022_06_30_200827) do
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
     t.string "type"
+    t.string "stripe_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
@@ -88,6 +110,8 @@ ActiveRecord::Schema.define(version: 2022_06_30_200827) do
 
   add_foreign_key "feature_plans", "featrues"
   add_foreign_key "feature_plans", "plans"
+  add_foreign_key "stripe_subscriptions", "stripe_plans"
+  add_foreign_key "stripe_subscriptions", "users"
   add_foreign_key "subscriptions", "plans"
   add_foreign_key "subscriptions", "users", column: "buyer_id"
 end
