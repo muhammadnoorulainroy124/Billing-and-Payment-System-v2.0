@@ -24,11 +24,11 @@
         </div>
         <div class="form-group form-check">
 
-        <%= form.collection_check_boxes(:plan_id, get_not_subscribed_plans, :id, :name)%>
+        <%= form.collection_check_boxes(:plan_id, not_subscribed_plans, :id, :name)%>
 
         </div>
        </div>
-        <% if is_available %>
+        <% if available? %>
         <div class="actions">
           <%= form.submit "Subscribe", class: 'btn btn-success'%>
         </div>

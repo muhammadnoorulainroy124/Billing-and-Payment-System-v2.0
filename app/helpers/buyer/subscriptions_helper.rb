@@ -1,25 +1,25 @@
-module Buyer::SubscriptionsHelper
-  @@is_plan_available = false
+# frozen_string_literal: true
 
-  def get_not_subscribed_plans
+module Buyer::SubscriptionsHelper
+  @is_plan_available = false
+
+  def not_subscribed_plans
     buyer_plans = current_user.plans
     not_subscribed = Plan.left_joins(:subscriptions).where.not(id: buyer_plans)
-    if(not_subscribed).length > 0
-      @@is_plan_available = true
-    end
-    return not_subscribed
+    @is_plan_available = true if not_subscribed.length.positive?
+    not_subscribed
   end
 
-  def get_all_plans
+  def all_plans
     Plan.all
   end
 
-  def get_all_features_of_plan(plan)
-    features = plan.features
+  def all_features_of_plan(plan)
+    plan.features
   end
 
-  def is_available
-    @@is_plan_available
+  def available?
+    @is_plan_available
   end
-
 end
+

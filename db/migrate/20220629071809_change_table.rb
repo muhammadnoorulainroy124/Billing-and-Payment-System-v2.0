@@ -1,9 +1,15 @@
-class ChangeTable < ActiveRecord::Migration[5.2]
-  def change
-    remove_column :feature_plans, :usage
-    remove_column :feature_plans, :max_unit_limit
-    add_column :featrues, :usage, :integer
-    add_column :featrues, :max_unit_limit, :integer
+# frozen_string_literal: true
 
+class ChangeTable < ActiveRecord::Migration[5.2]
+  def up
+    change_table :feature_plans, bulk: true do |t|
+      t.remove :usage
+      t.remove :max_unit_limit
+    end
+
+    change_table :features, bulk: true do |t|
+      t.integer :usage
+      t.integer :max_unit_limit
+    end
   end
 end

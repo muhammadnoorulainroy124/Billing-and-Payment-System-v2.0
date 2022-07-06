@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddConstraintsOnDatabase < ActiveRecord::Migration[5.2]
   def change
     change_column_null :featrues, :usage, false
@@ -8,7 +10,5 @@ class AddConstraintsOnDatabase < ActiveRecord::Migration[5.2]
 
     add_index :plans, :name, unique: true
     add_index :featrues, :name, unique: true
-  
-
   end
 end

@@ -1,16 +1,16 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
-
-
   namespace :admin do
     resources :features
     resources :plans
   end
 
-  scope :admin, as: "admin" do
-    root 'admin/featrues#index'
+  scope :admin, as: 'admin' do
+    root 'admin/features#index'
   end
 
-  scope :buyer, as: "buyer" do
+  scope :buyer, as: 'buyer' do
     root 'buyer/subscriptions#index'
   end
 
@@ -24,5 +24,5 @@ Rails.application.routes.draw do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
 
-  root :to => 'admin/featrues#index'
+  root to: 'admin/features#index'
 end
