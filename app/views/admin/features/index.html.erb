@@ -18,16 +18,16 @@
             </thead>
 
             <tbody>
-              <% @featrues.each do |featrue| %>
+              <% @features.each do |feature| %>
                 <tr>
-                  <td><%= featrue.name %></td>
-                  <td><%= featrue.code %></td>
-                  <td><%= featrue.unit_price %></td>
-                  <td><%= featrue.usage %></td>
-                  <td><%= featrue.max_unit_limit %></td>
-                  <td><%= link_to 'Show', admin_featrue_path(featrue.id), remote: true %></td>
-                  <td><%= link_to 'Edit', edit_admin_featrue_path(featrue)%></td>
-                  <td><%= link_to 'Destroy', admin_featrue_path(featrue.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  <td><%= feature.name %></td>
+                  <td><%= feature.code %></td>
+                  <td><%= feature.unit_price %></td>
+                  <td><%= feature.usage %></td>
+                  <td><%= feature.max_unit_limit %></td>
+                  <td><%= link_to 'Show', admin_feature_path(feature.id), remote: true %></td>
+                  <td><%= link_to 'Edit', edit_admin_feature_path(feature)%></td>
+                  <td><%= link_to 'Destroy', admin_feature_path(feature.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
                 </tr>
               <% end %>
             </tbody>
@@ -36,7 +36,7 @@
 
         <br>
 
-        <%= link_to 'New Feature', new_admin_featrue_path, class: "btn btn-success" %>
+        <%= link_to 'New Feature', new_admin_feature_path, class: "btn btn-success" %>
   </div>
   </div>
   </div>

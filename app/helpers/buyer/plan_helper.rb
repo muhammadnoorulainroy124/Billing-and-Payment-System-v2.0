@@ -9,6 +9,6 @@ module Buyer::PlanHelper
   end
 
   def get_all_features_of_plan(plan)
-    features = plan.featrues
+    features = plan.features
   end
 end

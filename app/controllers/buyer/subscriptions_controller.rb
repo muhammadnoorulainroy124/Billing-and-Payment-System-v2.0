@@ -11,18 +11,6 @@ class Buyer::SubscriptionsController < ApplicationController
   end
 
   def create
-    @object = Object.new(params[:object])
-    if @object.save
-      flash[:success] = "Object successfully created"
-      redirect_to @object
-    else
-      flash[:error] = "Something went wrong"
-      render 'new'
-    end
-  end
-
-
-  def create
     if params[:subscription][:plan_id].length == 1
       flash[:error] = "Please select at least one plan!"
       redirect_to new_buyer_subscription_path
@@ -36,12 +24,6 @@ class Buyer::SubscriptionsController < ApplicationController
       redirect_to buyer_subscriptions_path
     end
 
-  end
-
-  def show
-  end
-
-  def update
   end
 
   private

@@ -10,37 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_30_200827) do
+ActiveRecord::Schema.define(version: 2022_07_06_082727) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "books", force: :cascade do |t|
-    t.string "title"
-    t.integer "pages"
+  create_table "feature_plans", force: :cascade do |t|
+    t.bigint "plan_id"
+    t.bigint "feature_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["feature_id"], name: "index_feature_plans_on_feature_id"
+    t.index ["plan_id"], name: "index_feature_plans_on_plan_id"
   end
 
-  create_table "featrues", force: :cascade do |t|
+  create_table "features", force: :cascade do |t|
     t.string "name", null: false
     t.integer "code", null: false
+    t.integer "usage", null: false
+    t.integer "max_unit_limit", null: false
     t.decimal "unit_price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "usage", null: false
-    t.integer "max_unit_limit", null: false
-    t.index ["code"], name: "index_featrues_on_code"
-    t.index ["name"], name: "index_featrues_on_name", unique: true
-  end
-
-  create_table "feature_plans", force: :cascade do |t|
-    t.bigint "plan_id"
-    t.bigint "featrue_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["featrue_id"], name: "index_feature_plans_on_featrue_id"
-    t.index ["plan_id"], name: "index_feature_plans_on_plan_id"
+    t.index ["code"], name: "index_features_on_code", unique: true
+    t.index ["name"], name: "index_features_on_name", unique: true
   end
 
   create_table "plans", force: :cascade do |t|
@@ -49,6 +42,27 @@ ActiveRecord::Schema.define(version: 2022_06_30_200827) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_plans_on_name", unique: true
+  end
+
+  create_table "stripe_plans", force: :cascade do |t|
+    t.string "name"
+    t.string "description"
+    t.integer "interval"
+    t.integer "price_cents"
+    t.string "stripe_price_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "stripe_subscriptions", force: :cascade do |t|
+    t.bigint "stripe_plan_id"
+    t.bigint "user_id"
+    t.boolean "active", default: true
+    t.string "stripe_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stripe_plan_id"], name: "index_stripe_subscriptions_on_stripe_plan_id"
+    t.index ["user_id"], name: "index_stripe_subscriptions_on_user_id"
   end
 
   create_table "subscriptions", force: :cascade do |t|
@@ -79,6 +93,7 @@ ActiveRecord::Schema.define(version: 2022_06_30_200827) do
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
     t.string "type"
+    t.string "stripe_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
@@ -86,8 +101,10 @@ ActiveRecord::Schema.define(version: 2022_06_30_200827) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "feature_plans", "featrues"
+  add_foreign_key "feature_plans", "features"
   add_foreign_key "feature_plans", "plans"
+  add_foreign_key "stripe_subscriptions", "stripe_plans"
+  add_foreign_key "stripe_subscriptions", "users"
   add_foreign_key "subscriptions", "plans"
   add_foreign_key "subscriptions", "users", column: "buyer_id"
 end

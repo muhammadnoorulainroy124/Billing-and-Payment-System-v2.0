@@ -24,29 +24,14 @@ class Admin::PlansController < ApplicationController
 
 
   def create
-      charges = PlansUtilityModule.calculate_monthly_charges(params[:plan][:featrue_ids]);
-      subscription = Stripe::Plan.create(
-        :amount => 10000*100,
-        :interval => 'month',
-        :name => params[:name],
-        :currency => 'usd',
-        :trial_plan => nil,
-        :product => 'prod_LyhxbwoxAidqpM'
-        :id => SecureRandom.uuid # This ensures that the plan is unique in stripe
-      )
-
+      charges = PlansUtilityModule.calculate_monthly_charges(params[:plan][:feature_ids]);
       @plan = Plan.new(plan_params.merge!(monthly_fee: charges))
-      puts "params are #{plan_params.merge!(monthly_fee: charges)}"
-
 
       respond_to do |format|
         if @plan.save
-
           format.html { redirect_to admin_plans_url notice: "Plan was successfully created." }
-          format.json { render :show, status: :created, location: @plan }
         else
-          format.html { render :new, status: :unprocessable_entity }
-          format.json { render json: @plan.errors, status: :unprocessable_entity }
+          format.html { render :new }
         end
     end
   end
@@ -56,10 +41,8 @@ class Admin::PlansController < ApplicationController
     respond_to do |format|
       if @plan.update(plan_params)
         format.html { redirect_to admin_plan_url(@plan), notice: "Plan was successfully updated." }
-        format.json { render :show, status: :ok, location: @plan }
       else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @plan.errors, status: :unprocessable_entity }
+        format.html { render :edit }
       end
     end
   end
@@ -70,7 +53,6 @@ class Admin::PlansController < ApplicationController
 
     respond_to do |format|
       format.html { redirect_to admin_plans_url, notice: "Plan was successfully destroyed." }
-      format.json { head :no_content }
     end
   end
 
@@ -81,7 +63,7 @@ class Admin::PlansController < ApplicationController
 
 
     def plan_params
-      params.require(:plan).permit(:name, :monthly_fee, featrue_ids:[])
+      params.require(:plan).permit(:name, :monthly_fee, feature_ids:[])
     end
 
 

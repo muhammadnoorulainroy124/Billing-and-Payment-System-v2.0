@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
 
   namespace :admin do
-    resources :featrues
+    resources :features
     resources :plans
   end
 
@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   end
 
   scope :buyer, as: "buyer" do
-    root 'buyer/plans#index'
+    root 'buyer/subscriptions#index'
   end
 
   namespace :buyer do
