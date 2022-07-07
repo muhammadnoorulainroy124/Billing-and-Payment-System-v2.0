@@ -19,24 +19,8 @@ class Admin::PlansController < ApplicationController
   def edit; end
 
   def create
-<<<<<<< HEAD
-      charges = PlansUtilityModule.calculate_monthly_charges(params[:plan][:featrue_ids]);
-      subscription = Stripe::Plan.create(
-        :amount => 10000*100,
-        :interval => 'month',
-        :name => params[:name],
-        :currency => 'usd',
-        :trial_plan => nil,
-        :product => 'prod_LyhxbwoxAidqpM',
-        :id => SecureRandom.uuid # This ensures that the plan is unique in stripe
-      )
-
-      @plan = Plan.new(plan_params.merge!(monthly_fee: charges))
-      puts "params are #{plan_params.merge!(monthly_fee: charges)}"
-=======
     charges = PlansUtilityModule.calculate_monthly_charges(params[:plan][:feature_ids])
     @plan = Plan.new(plan_params.merge!(monthly_fee: charges))
->>>>>>> feature/implementation-of-plans-and-features-in-app
 
     respond_to do |format|
       if @plan.save
