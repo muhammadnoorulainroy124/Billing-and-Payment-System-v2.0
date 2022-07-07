@@ -1,4 +1,6 @@
+# frozen_string_literal: true
+
 class FeaturePlan < ApplicationRecord
   belongs_to :plan
-  belongs_to :featrue
+  belongs_to :feature
 end

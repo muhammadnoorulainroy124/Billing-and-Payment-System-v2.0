@@ -1,2 +1,0 @@
-module Admin::PlanHelper
-end

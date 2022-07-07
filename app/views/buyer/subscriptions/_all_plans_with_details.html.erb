@@ -4,7 +4,7 @@
     <div class="card-body">
       <h4 class="card-title">All Plans</h4>
       <hr />
-      <% get_all_plans.each do |plan|%>
+      <% all_plans.each do |plan|%>
         <h5> <%= plan.name %> </h5>
         <h5> Price: Rs. <%= plan.monthly_fee%> </h5>
         <div class="container">
@@ -22,7 +22,7 @@
                 </thead>
 
                 <tbody>
-                  <%= render partial: "features", collection: get_all_features_of_plan(plan)%>
+                  <%= render partial: "features", collection: all_features_of_plan(plan)%>
                 </tbody>
               </table>
             </div>

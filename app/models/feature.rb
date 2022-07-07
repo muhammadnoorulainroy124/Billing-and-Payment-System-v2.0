@@ -1,4 +1,6 @@
-class Featrue < ApplicationRecord
+# frozen_string_literal: true
+
+class Feature < ApplicationRecord
   has_many :feature_plans, dependent: :destroy
   has_many :plans, through: :feature_plans
 
