@@ -6,7 +6,6 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :invitable, :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-<<<<<<< HEAD
 
   validates :stripe_id, presence: true, uniqueness: true
 
@@ -20,6 +19,4 @@ class User < ApplicationRecord
   def retrieve_stripe_reference
     Stripe::Customer.retrieve(stripe_id)
   end
-=======
->>>>>>> feature/implementation-of-plans-and-features-in-app
 end
