@@ -10,7 +10,7 @@ class StripePlan < ApplicationRecord
     response = Stripe::Price.create({
       unit_amount: price_cents,
       currency: 'usd',
-      recurring: { interval: interval },
+      recurring: { interval: 'month' },
       product_data: { name: name }
     })
     self.stripe_price_id = response.id

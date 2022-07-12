@@ -25,9 +25,9 @@
                   <td><%= feature.unit_price %></td>
                   <td><%= feature.usage %></td>
                   <td><%= feature.max_unit_limit %></td>
-                  <td><%= link_to 'Show', admin_feature_path(feature.id), remote: true %></td>
-                  <td><%= link_to 'Edit', edit_admin_feature_path(feature)%></td>
-                  <td><%= link_to 'Destroy', admin_feature_path(feature.id), method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  <td><%= link_to 'Show', admin_feature_path(feature.id), remote: true, class: 'btn btn-info' %></td>
+                  <td><%= link_to 'Edit', edit_admin_feature_path(feature), class: 'btn btn-primary'%></td>
+                  <td><%= link_to 'Destroy', admin_feature_path(feature.id), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %></td>
                 </tr>
               <% end %>
             </tbody>

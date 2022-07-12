@@ -18,3 +18,4 @@
 //= require activestorage
 //= require turbolinks
 //= require login
+//= require subscribe_plan

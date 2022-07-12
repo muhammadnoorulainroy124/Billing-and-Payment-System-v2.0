@@ -13,25 +13,36 @@ class Buyer::SubscriptionsController < ApplicationController
   end
 
   def create
-    if params[:subscription][:plan_id].length == 1
-      flash[:error] = 'Please select at least one plan!'
-      redirect_to new_buyer_subscription_path
-    else
-      params[:subscription][:plan_id].each do |p_id|
-        next if p_id == ''
-
-        @subscription = Subscription.new(subscription_params.merge!(plan_id: p_id.to_i, billing_day: Time.zone.today,
-                                                                    buyer_id: current_user.id))
+      @subscription = Subscription.new(subscription_params.merge!(billing_day: Time.zone.today, buyer_id: current_user.id))
+      @stripe_subscrption = StripeSubscription.new(stripe_subscription_params.merge!(user_id: current_user.id, stripe_plan_id: BuyerSubscription.stripe_plan_id(params[:subscription][:plan_id]), active: true))
+      ActiveRecord::Base.transaction do
+        response = @stripe_subscrption.save
         @subscription.save
+        flash[:success] = 'Plan subscribed successfully.'
+        redirect_to buyer_subscriptions_path
+
+        rescue => e
+          flash[:error] = e.error.message
+          render :new
       end
-      flash[:success] = 'Plan(s) subscribed successfully.'
-      redirect_to buyer_subscriptions_path
+  end
+
+  def destroy
+    @subscription = Subscription.find_by(buyer_id: current_user.id, plan_id: params[:id])
+    @subscription.destroy
+
+    respond_to do |format|
+      format.html { redirect_to buyer_subscriptions_url, notice: 'Plan was unsubscribed successfully.' }
     end
   end
 
   private
 
   def subscription_params
-    params.require(:subscription).permit(:buyer_id, :billing_day, plan_id: [])
+    params.require(:subscription).permit(:buyer_id, :billing_day, :plan_id)
+  end
+
+  def stripe_subscription_params
+    params.permit(:card_number, :cvc, :exp_month, :exp_year)
   end
 end

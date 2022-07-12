@@ -9,6 +9,7 @@ class StripeSubscription < ApplicationRecord
   before_validation :create_stripe_reference, on: :create
 
   def create_stripe_reference
+    puts "#{card_number} + #{exp_month} + #{exp_year} + #{cvc}"
     Stripe::Customer.create_source(
       user.stripe_id,
       { source: generate_card_token }
@@ -16,7 +17,7 @@ class StripeSubscription < ApplicationRecord
     response = Stripe::Subscription.create({
       customer: user.stripe_id,
       items: [
-        { price: plan.stripe_price_id }
+        { price: stripe_plan.stripe_price_id }
       ]
     })
     self.stripe_id = response.id
@@ -32,5 +33,5 @@ class StripeSubscription < ApplicationRecord
       }
     }).id
   end
-  
+
 end
