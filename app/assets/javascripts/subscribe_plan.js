@@ -8,4 +8,7 @@ $(document).ready(function(){
       $("#plan_idd").val(plan_id)
     })
   })
+  $('#close-modal').on('click', function(){
+    location.reload();
+  })
 })

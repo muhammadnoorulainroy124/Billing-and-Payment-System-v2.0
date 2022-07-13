@@ -24,5 +24,7 @@ Rails.application.routes.draw do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
 
+  mount StripeEvent::Engine, at: 'webhooks'
+
   root to: 'admin/features#index'
 end
