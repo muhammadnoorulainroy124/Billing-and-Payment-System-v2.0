@@ -1,0 +1,40 @@
+
+<section>
+
+  <div class="container">
+    <div class="card" style="width:700px">
+      <div class="card-body">
+      <h4 class="card-title">All Plans</h4>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Monthly Charges</th>
+                <th colspan=2>Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @plans.each do |plan| %>
+                <tr>
+                  <td><%= plan.name %></td>
+                  <td><%= plan.monthly_fee %></td>
+                  <td><%= link_to 'Show', admin_plan_path(plan.id), class: 'btn btn-info'  %></td>
+                  <td><%= link_to 'Edit', edit_admin_plan_path(plan), class: 'btn btn-primary' %></td>
+                  <td><%= link_to 'Destroy', admin_plan_path(plan.id), method: :delete, data: { confirm: 'Are you sure? This operation cannot be undo.' }, class: 'btn btn-danger'  %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+
+        <br>
+
+        <%= link_to 'New Plan', new_admin_plan_path, class: "btn btn-success" %>
+  </div>
+  </div>
+  </div>
+
+<div id='plan-content'></div>
+</section>
