@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Buyer::SubscriptionsController < ApplicationController
-  before_action :set_subscription, only: %i[show_usage, increase_usage]
   include BuyerSubscription
   require 'date'
   layout 'buyer'
@@ -36,15 +35,32 @@ class Buyer::SubscriptionsController < ApplicationController
   end
 
   def increase_usage
+    @subscription = Subscription.find_by(plan_id: params[:id], buyer_id: current_user.id)
+    BuyerSubscription.verify_usage_limit(params)
+    BuyerSubscription.update_usage(@subscription, params)
+    flash[:success] = 'Usage has been updated successfully'
+    redirect_to buyer_subscriptions_path
   end
 
   def destroy
     @subscription = Subscription.find_by(buyer_id: current_user.id, plan_id: params[:id])
+    @plan = Plan.find(params[:id])
+    @stripe_plan = StripePlan.find_by(name: @plan.name)
+    StripeSubscription.find_by(stripe_plan_id: @stripe_plan.id).update(active: false)
+    StripeSubscription.where(active: false).destroy_all
+    Usage.where(subscription_id: @subscription.id).destroy_all
     @subscription.destroy
 
     respond_to do |format|
       format.html { redirect_to buyer_subscriptions_url, notice: 'Plan was unsubscribed successfully.' }
     end
+  end
+
+  def max_limit
+    @feature_ids = params[:f_ids]
+    respond_to do |format|
+      format.js { render 'show_usage' }
+   end
   end
 
   private
@@ -58,11 +74,12 @@ class Buyer::SubscriptionsController < ApplicationController
   end
 
   def usage_params
-    params.permit(:subscription_id, feature_id: [])
+    params.permit(:subscription_id, feature_id:[])
   end
 
   def create_usage
     subscription_data = BuyerSubscription.subscription_features_usage(params[:subscription][:plan_id], current_user.id)
     insert_features_usage(subscription_data)
   end
+
 end

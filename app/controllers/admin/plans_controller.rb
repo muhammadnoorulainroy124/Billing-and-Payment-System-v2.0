@@ -42,10 +42,11 @@ class Admin::PlansController < ApplicationController
   end
 
   def destroy
+    StripePlan.find_by(name: @plan.name).destroy
     @plan.destroy
 
     respond_to do |format|
-      format.html { redirect_to admin_plans_url, notice: 'Plan was successfully destroyed.' }
+      format.html { redirect_to admin_plans_url, notice: 'Plan was successfully deleted.' }
     end
   end
 

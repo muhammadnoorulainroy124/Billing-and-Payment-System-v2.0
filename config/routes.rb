@@ -18,7 +18,10 @@ Rails.application.routes.draw do
     resources :subscriptions do
       member do
         get 'show_usage'
-        post 'increase_usage'
+        patch 'increase_usage'
+      end
+      collection do
+        post 'max_limit'
       end
     end
   end

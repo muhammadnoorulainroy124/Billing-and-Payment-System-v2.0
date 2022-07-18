@@ -20,4 +20,44 @@ module BuyerSubscription
       Usage.create(subscription_id: subscription_data.last, feature_id: f_id)
     end
   end
+
+  def self.update_usage(subscription, params)
+    params[:subscription].each do |key, value|
+      Usage.where(subscription_id: subscription.id, feature_id: key).update(usage: value)
+    end
+  end
+
+  def self.verify_usage_limit(params)
+    usage_limit = {}
+    plan = Plan.find(params[:id])
+    f_ids = plan.features.pluck(:id)
+    f_ids.each do |f_id|
+      usage_limit[f_id] = Feature.find(f_id).max_unit_limit
+    end
+    overcharge = calculate_price(params, usage_limit)
+    if(overcharge > 0)
+      update_stripe_plan(plan, overcharge)
+    end
+  end
+
+  def self.calculate_price(params, usage_limit)
+    overcharge = 0
+    params[:subscription].each do |key, value|
+      if value.to_i > usage_limit[key.to_i]
+        exceeded_units = value.to_i - usage_limit[key.to_i]
+        overcharge += exceeded_units * Feature.find(key.to_i).unit_price
+      end
+    end
+    return overcharge
+  end
+
+  def self.update_stripe_plan(plan, overcharge)
+    stripe_plan = StripePlan.new(name: "#{plan.name} extended #{rand(1..1000)}", price_cents: (plan.monthly_fee + overcharge)*100)
+    stripe_plan.save
+
+    s_plan = StripePlan.find_by(name: plan.name)
+    s_subscription = StripeSubscription.find_by(stripe_plan_id: s_plan.id)
+    s_subscription.update_subscription(stripe_plan.stripe_price_id, s_subscription.stripe_id)
+  end
+
 end

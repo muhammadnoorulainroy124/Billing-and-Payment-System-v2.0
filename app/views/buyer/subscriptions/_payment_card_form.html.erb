@@ -14,12 +14,12 @@
             <%= f.hidden_field :plan_id, id: "plan_idd"%>
             <div class="form-group">
               <%= label_tag :card_number, "Credit Card Number"%>
-              <%= text_field_tag :card_number, nil, class: 'form-control' %>
+              <%= number_field_tag :card_number, nil, required: true, :input_html => {:minlength => 10 , maxlength: 25},  class: 'form-control' %>
             </div>
 
             <div class="form-group">
               <%= label_tag :cvc, "Security Code on Card (CVC)" %>
-              <%= text_field_tag :cvc, nil, class: 'form-control' %>
+              <%= number_field_tag :cvc, nil, required: true,  :input_html => {:minlength => 10 , maxlength: 25}, class: 'form-control' %>
             </div>
 
             <div class="form-group">

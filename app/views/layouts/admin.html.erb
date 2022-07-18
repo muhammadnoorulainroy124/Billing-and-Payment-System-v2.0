@@ -23,7 +23,7 @@
     <div class="admin-content">
       <%= render 'shared/admin_navbar' %>
       <%= render 'shared/admin_sidebar'%>
-      <div style="position: absolute; top: 100px; left: 250px; height: 1000vh; width: calc(100% - 250px); background-color: var(--body-color);transition: var(--tran-05);">
+      <div style="position: absolute; top: 100px; left: 250px; height: 100vh; width: calc(100% - 250px); background-color: var(--body-color);transition: var(--tran-05);">
         <% flash.each do |type, msg| %>
           <% if type == "notice" || type == "success" %>
             <div class="alert alert-success">

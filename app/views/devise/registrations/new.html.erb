@@ -28,6 +28,11 @@
     </div>
 
     <div class="field">
+      <%= f.label :image%><br />
+      <%= f.file_field :image, required: true %>
+    </div>
+
+    <div class="field">
       <%= f.label :"Sign Up As" %><br />
       <%= f.text_field :type, value: "Admin", readonly: true %>
     </div>

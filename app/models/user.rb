@@ -9,6 +9,8 @@ class User < ApplicationRecord
 
   validates :stripe_id, presence: true, uniqueness: true
 
+  has_one_attached :image
+
   before_validation :create_stripe_reference, on: :create
 
   def create_stripe_reference

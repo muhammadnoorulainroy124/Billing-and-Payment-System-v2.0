@@ -21,7 +21,7 @@
                 <tr>
                   <td><%= feature.name %></td>
                   <td><%= feature.code %></td>
-                  <td><%= feature.unit_price %></td>
+                  <td>US$ <%= feature.unit_price %></td>
                   <td><%= feature.max_unit_limit %></td>
                   <td><%= link_to 'Show', admin_feature_path(feature.id), remote: true, class: 'btn btn-info' %></td>
                   <td><%= link_to 'Edit', edit_admin_feature_path(feature), class: 'btn btn-primary'%></td>

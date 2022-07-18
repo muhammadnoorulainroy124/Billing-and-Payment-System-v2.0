@@ -9,7 +9,9 @@
         </button>
       </div>
       <div class="modal-body">
-        <div>
+        <div class="alert alert-info d-none usage-div">
+          <p class="usage-notif"></p>
+        </div>
         <div class="table-responsive">
           <%= form_with model: @subscription, url: increase_usage_buyer_subscription_path do |form|%>
             <table class="table table-striped">
@@ -21,9 +23,9 @@
               </tr>
               <%= render partial: 'subscription_features', collection: subscription_features(@subscription), locals: {form: form, subscription: @subscription}%>
             </table>
+            <%= form.submit 'Save', class: 'btn btn-success'%>
           <% end %>
         </div>
-      </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -31,13 +33,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  $(document).ready(function(){
-    var current_val = $("#subscription_usage").val()
-    alert (current_val)
-    $('#subscription_usage').on('input', function() {
-        alert("Change to " + this.value);
-    });
-  })
-</script>
