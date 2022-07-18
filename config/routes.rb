@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :features
     resources :plans
+    resources :transactions, only:[:index, :destroy] do
+    end
   end
 
   scope :admin, as: 'admin' do
@@ -30,9 +32,8 @@ Rails.application.routes.draw do
 
   devise_scope :user do
     get '/users/sign_out' => 'devise/sessions#destroy'
+    root to: 'devise/sessions#new'
   end
 
   mount StripeEvent::Engine, at: 'webhooks'
-
-  root to: 'admin/features#index'
 end

@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 class Buyer::SubscriptionsController < ApplicationController
+  before_action :authenticate_user!
   include BuyerSubscription
   require 'date'
   layout 'buyer'
   def new
     @subscription = Subscription.new
+    authorize @subscription
   end
 
   def index
@@ -14,6 +16,7 @@ class Buyer::SubscriptionsController < ApplicationController
 
   def create
       @subscription = Subscription.new(subscription_params.merge!(billing_day: Time.zone.today, buyer_id: current_user.id))
+      authorize @subscription
       @stripe_subscrption = StripeSubscription.new(stripe_subscription_params.merge!(user_id: current_user.id, stripe_plan_id: BuyerSubscription.stripe_plan_id(params[:subscription][:plan_id]), active: true))
       ActiveRecord::Base.transaction do
         response = @stripe_subscrption.save
@@ -29,6 +32,7 @@ class Buyer::SubscriptionsController < ApplicationController
 
   def show_usage
     @subscription = Subscription.find_by(plan_id: params[:id], buyer_id: current_user.id)
+    authorize @subscription
     respond_to do |format|
       format.js
     end
@@ -36,6 +40,7 @@ class Buyer::SubscriptionsController < ApplicationController
 
   def increase_usage
     @subscription = Subscription.find_by(plan_id: params[:id], buyer_id: current_user.id)
+    authorize @subscription
     BuyerSubscription.verify_usage_limit(params)
     BuyerSubscription.update_usage(@subscription, params)
     flash[:success] = 'Usage has been updated successfully'
@@ -44,6 +49,7 @@ class Buyer::SubscriptionsController < ApplicationController
 
   def destroy
     @subscription = Subscription.find_by(buyer_id: current_user.id, plan_id: params[:id])
+    authorize @subscription
     @plan = Plan.find(params[:id])
     @stripe_plan = StripePlan.find_by(name: @plan.name)
     StripeSubscription.find_by(stripe_plan_id: @stripe_plan.id).update(active: false)

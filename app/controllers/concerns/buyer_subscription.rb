@@ -52,7 +52,7 @@ module BuyerSubscription
   end
 
   def self.update_stripe_plan(plan, overcharge)
-    stripe_plan = StripePlan.new(name: "#{plan.name} extended #{rand(1..1000)}", price_cents: (plan.monthly_fee + overcharge)*100)
+    stripe_plan = StripePlan.new(name: "#{plan.name} extended_#{rand(1..1000)}", price_cents: (plan.monthly_fee + overcharge)*100)
     stripe_plan.save
 
     s_plan = StripePlan.find_by(name: plan.name)

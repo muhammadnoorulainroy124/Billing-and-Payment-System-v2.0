@@ -3,45 +3,48 @@ class Admin::PlansController < ApplicationController
   include PlansUtilityModule
   layout 'admin'
   before_action :set_plan, only: %i[show edit update destroy]
+  before_action :authenticate_user!
 
   def index
     @plans = Plan.all
+    authorize @plans
   end
 
-  def show; end
-
-  def new
-    @plan = Plan.new
-  end
-
-  def edit; end
-
-  def create
-    charges = PlansUtilityModule.calculate_monthly_charges(params[:plan][:feature_ids])
-    @plan = Plan.new(plan_params.merge!(monthly_fee: charges))
-    @stripe_plan = StripePlan.new(stripe_plan_params.merge!(name: params[:plan][:name], price_cents: charges*100))
-
+  def show
+    authorize @plan
     respond_to do |format|
-      if @plan.save
-        @stripe_plan.save
-        format.html { redirect_to admin_plans_url notice: 'Plan was successfully created.' }
-      else
-        format.html { render :new }
-      end
+      format.js
     end
   end
 
-  def update
-    respond_to do |format|
-      if @plan.update(plan_params)
-        format.html { redirect_to admin_plan_url(@plan), notice: 'Plan was successfully updated.' }
-      else
-        format.html { render :edit }
+  def new
+    @plan = Plan.new
+    authorize @plan
+  end
+
+  def create
+    if params[:plan][:feature_ids].length == 1
+      flash[:error] = 'Please select at least one feature'
+      redirect_to new_admin_plan_path
+    else
+      charges = PlansUtilityModule.calculate_monthly_charges(params[:plan][:feature_ids])
+      @plan = Plan.new(plan_params.merge!(monthly_fee: charges))
+      authorize @plan
+      @stripe_plan = StripePlan.new(stripe_plan_params.merge!(name: params[:plan][:name], price_cents: charges*100))
+
+      respond_to do |format|
+        if @plan.save
+          @stripe_plan.save
+          format.html { redirect_to admin_plans_url notice: 'Plan was successfully created.' }
+        else
+          format.html { render :new }
+        end
       end
     end
   end
 
   def destroy
+    authorize @plan
     StripePlan.find_by(name: @plan.name).destroy
     @plan.destroy
 

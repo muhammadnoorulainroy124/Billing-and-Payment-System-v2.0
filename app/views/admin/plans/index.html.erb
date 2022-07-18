@@ -20,8 +20,7 @@
                 <tr>
                   <td><%= plan.name %></td>
                   <td><%= plan.monthly_fee %></td>
-                  <td><%= link_to 'Show', admin_plan_path(plan.id), class: 'btn btn-info'  %></td>
-                  <td><%= link_to 'Edit', edit_admin_plan_path(plan), class: 'btn btn-primary' %></td>
+                  <td><%= link_to 'Show', admin_plan_path(plan.id), class: 'btn btn-info', remote: true%></td>
                   <td><%= link_to 'Destroy', admin_plan_path(plan.id), method: :delete, data: { confirm: 'Are you sure? This operation cannot be undo.' }, class: 'btn btn-danger'  %></td>
                 </tr>
               <% end %>

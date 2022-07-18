@@ -4,12 +4,15 @@
 class Admin::FeaturesController < ApplicationController
   layout 'admin'
   before_action :set_feature, only: %i[show edit update destroy]
+  before_action :authenticate_user!
 
   def index
     @features = Feature.all
+    authorize @features
   end
 
   def show
+    authorize @feature
     respond_to do |format|
       format.js
     end
@@ -17,13 +20,16 @@ class Admin::FeaturesController < ApplicationController
 
   def new
     @feature = Feature.new
+    authorize @feature
   end
 
-  def edit; end
+  def edit
+    authorize @feature
+  end
 
   def create
     @feature = Feature.new(feature_params)
-
+    authorize @feature
     respond_to do |format|
       if @feature.save
         format.html { redirect_to admin_features_url, notice: 'Feature was successfully created.' }
@@ -34,6 +40,7 @@ class Admin::FeaturesController < ApplicationController
   end
 
   def update
+    authorize @feature
     respond_to do |format|
       if @feature.update(feature_params)
         format.html { redirect_to admin_features_url, notice: 'Feature was successfully updated.' }
@@ -44,6 +51,7 @@ class Admin::FeaturesController < ApplicationController
   end
 
   def destroy
+    authorize @feature
     @feature.destroy
 
     respond_to do |format|

@@ -24,22 +24,22 @@
 
         <div class="form-group">
           <%= form.label :name %>
-          <%= form.text_field :name, required: true, class:"form-control" %>
+          <%= form.text_field :name, required: true, maxlength: 15, class:"form-control" %>
         </div>
 
         <div class="form-group">
           <%= form.label :code %>
-          <%= form.number_field :code, required: true, class:"form-control" %>
+          <%= form.text_field :code, required: true, maxlength: 6, class:"form-control" %>
         </div>
 
         <div class="form-group">
           <%= form.label :unit_price %>
-          <%= form.text_field :unit_price, required: true, class:"form-control" %>
+          <%= form.number_field :unit_price, required: true, min: 0, max: 100000, size: 6, class:"form-control" %>
         </div>
 
         <div class="form-group">
           <%= form.label :max_unit_limit %>
-          <%= form.text_field :max_unit_limit, required: true, class:"form-control" %>
+          <%= form.number_field :max_unit_limit, min: 0, max: 10000, required: true, size: 5, class:"form-control" %>
         </div>
 
         <div class="actions">
