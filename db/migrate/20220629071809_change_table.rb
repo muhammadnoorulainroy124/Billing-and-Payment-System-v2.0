@@ -7,7 +7,7 @@ class ChangeTable < ActiveRecord::Migration[5.2]
       t.remove :max_unit_limit
     end
 
-    change_table :features, bulk: true do |t|
+    change_table :featrues, bulk: true do |t|
       t.integer :usage
       t.integer :max_unit_limit
     end
