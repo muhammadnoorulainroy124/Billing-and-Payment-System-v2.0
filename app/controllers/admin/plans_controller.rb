@@ -6,7 +6,7 @@ class Admin::PlansController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @plans = Plan.all
+    @pagy, @plans = pagy(Plan.all, items: 5)
     authorize @plans
   end
 

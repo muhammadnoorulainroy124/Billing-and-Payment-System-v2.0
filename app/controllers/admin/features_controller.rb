@@ -7,7 +7,7 @@ class Admin::FeaturesController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    @features = Feature.all
+    @pagy, @features = pagy(Feature.all, items: 5)
     authorize @features
   end
 
