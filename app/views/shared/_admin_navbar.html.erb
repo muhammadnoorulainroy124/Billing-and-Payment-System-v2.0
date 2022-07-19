@@ -9,7 +9,7 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <% if current_user.image.attached? %>
-            <%= image_tag current_user.image, style: 'height:40px; width:40px;', class:"rounded-circle" %>
+            <%= cl_image_tag current_user.image.key, style: 'height:40px; width:40px;', class:"rounded-circle" %>
           <% else %>
             <%= image_tag "dp.jpeg", style: 'height:40px; width:40px;', class:"rounded-circle" %>
           <% end %>

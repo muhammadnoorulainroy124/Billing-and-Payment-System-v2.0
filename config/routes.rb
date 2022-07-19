@@ -36,4 +36,6 @@ Rails.application.routes.draw do
   end
 
   mount StripeEvent::Engine, at: 'webhooks'
+
+  get '*path' => redirect('/users/sign_in')
 end
