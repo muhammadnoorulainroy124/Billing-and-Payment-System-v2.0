@@ -13,5 +13,5 @@ class Admin::TransactionsController < ApplicationController
     @transaction.destroy
     flash[:success] = 'Transaction deleted successfully'
     redirect_to admin_transactions_path
-  end
+  end 
 end

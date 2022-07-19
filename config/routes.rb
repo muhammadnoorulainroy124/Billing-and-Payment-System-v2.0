@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :features
     resources :plans
-    resources :transactions, only:[:index, :destroy] do
+    resources :transactions, only:[:index, :destroy] do 
     end
   end
 
@@ -36,4 +36,6 @@ Rails.application.routes.draw do
   end
 
   mount StripeEvent::Engine, at: 'webhooks'
+
+  get '*path' => redirect('/users/sign_in')
 end
