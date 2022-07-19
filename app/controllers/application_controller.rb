@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up) { |u| u.permit(:name, :email, :password, :type, :image) }
     devise_parameter_sanitizer.permit(:accept_invitation,
-                                      keys: %i[name password password_confirmation type, :image])
+                                      keys: %i[name password password_confirmation type image])
   end
 
   private

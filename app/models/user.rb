@@ -11,7 +11,7 @@ class User < ApplicationRecord
 
   has_one_attached :image
 
-  before_validation :create_stripe_reference, on: :create
+  before_validation :create_stripe_reference, on: [:create, :update]
 
   def create_stripe_reference
     response = Stripe::Customer.create(email: email)
@@ -21,4 +21,5 @@ class User < ApplicationRecord
   def retrieve_stripe_reference
     Stripe::Customer.retrieve(stripe_id)
   end
+
 end
