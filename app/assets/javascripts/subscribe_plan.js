@@ -1,4 +1,5 @@
-$(document).ready(function(){
+var ready
+ready = (function(){
   var plan_id
   $("#subscribe_plan_form").on('submit', function(event){
     event.preventDefault()
@@ -12,3 +13,6 @@ $(document).ready(function(){
     location.reload();
   })
 })
+
+$(document).ready(ready);
+$(document).on('turbolinks:load', ready)

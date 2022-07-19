@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
   private
 
   def record_not_found
-    flash[:error] = 'Record not found.'
+    flash[:error] = 'Something went wrong. Please try again.'
     redirect_to request.referer || root_path
   end
 

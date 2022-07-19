@@ -4,8 +4,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :features
     resources :plans
-    resources :transactions, only: %i[index destroy] do
-    end
+    resources :transactions, only: %i[index destroy]
   end
 
   scope :admin, as: 'admin' do
