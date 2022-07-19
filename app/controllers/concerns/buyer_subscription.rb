@@ -51,7 +51,6 @@ module BuyerSubscription
     return overcharge
   end
 
-  #update plan price if feature usage is exceeded
   def self.update_stripe_plan(plan, overcharge)
     stripe_plan = StripePlan.new(name: "#{plan.name} extended_#{rand(1..1000)}", price_cents: (plan.monthly_fee + overcharge)*100)
     stripe_plan.save
