@@ -24,7 +24,6 @@ class StripePlan < ApplicationRecord
   end
 
   def delete_stripe_plan
-    puts"\n\n\n\n\n\n\n\n\n\n#{"update stripe"}\n\n\n\n\n\n\n\n\n\n"
     Stripe::Plan.delete(
       self.stripe_price_id
     )

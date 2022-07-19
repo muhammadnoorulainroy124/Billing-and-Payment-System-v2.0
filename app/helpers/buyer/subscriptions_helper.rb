@@ -28,7 +28,6 @@ module Buyer::SubscriptionsHelper
   end
 
   def subscription_feature_usage(subscription, feature)
-    puts "subscription id is #{subscription.id}"
     subscription_feature = Usage.find_by(subscription_id: subscription.id, feature_id: feature.id)
     subscription_feature.usage
   end
