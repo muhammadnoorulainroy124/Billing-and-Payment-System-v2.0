@@ -27,6 +27,7 @@ module Buyer::SubscriptionsHelper
     plan.features
   end
 
+  #find current usage of feature in a subscription
   def subscription_feature_usage(subscription, feature)
     subscription_feature = Usage.find_by(subscription_id: subscription.id, feature_id: feature.id)
     subscription_feature.usage
