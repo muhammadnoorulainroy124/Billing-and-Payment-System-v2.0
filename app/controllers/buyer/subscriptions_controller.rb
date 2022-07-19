@@ -15,19 +15,21 @@ class Buyer::SubscriptionsController < ApplicationController
   end
 
   def create
-      @subscription = Subscription.new(subscription_params.merge!(billing_day: Time.zone.today, buyer_id: current_user.id))
-      authorize @subscription
-      @stripe_subscrption = StripeSubscription.new(stripe_subscription_params.merge!(user_id: current_user.id, stripe_plan_id: BuyerSubscription.stripe_plan_id(params[:subscription][:plan_id]), active: true))
-      ActiveRecord::Base.transaction do
-        response = @stripe_subscrption.save
-        @subscription.save
-        create_usage()
-        flash[:success] = 'Plan subscribed successfully.'
-        redirect_to buyer_subscriptions_path
-        rescue => e
-          flash[:error] = e.error.message
-          render :new
-      end
+    @subscription = Subscription.new(subscription_params.merge!(billing_day: Time.zone.today,
+                                                                buyer_id: current_user.id))
+    authorize @subscription
+    @stripe_subscrption = StripeSubscription.new(stripe_subscription_params.merge!(user_id: current_user.id,
+                                                                                    stripe_plan_id: BuyerSubscription.stripe_plan_id(params[:subscription][:plan_id]), active: true))
+    ActiveRecord::Base.transaction do
+      @stripe_subscrption.save
+      @subscription.save
+      create_usage
+      flash[:success] = 'Plan subscribed successfully.'
+      redirect_to buyer_subscriptions_path
+    rescue StandardError => e
+      flash[:error] = e.error.message
+      render :new
+    end
   end
 
   def show_usage
@@ -66,7 +68,7 @@ class Buyer::SubscriptionsController < ApplicationController
     @feature_ids = params[:f_ids]
     respond_to do |format|
       format.js { render 'show_usage' }
-   end
+    end
   end
 
   private
@@ -80,12 +82,12 @@ class Buyer::SubscriptionsController < ApplicationController
   end
 
   def usage_params
-    params.permit(:subscription_id, feature_id:[])
+    params.permit(:subscription_id, feature_id: [])
   end
 
   def create_usage
-    subscription_data = BuyerSubscription.subscription_features_usage(params[:subscription][:plan_id], current_user.id)
+    subscription_data = BuyerSubscription.subscription_features_usage(params[:subscription][:plan_id],
+                                                                      current_user.id)
     insert_features_usage(subscription_data)
   end
-
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeFeatureTable < ActiveRecord::Migration[5.2]
   def change
     change_table :features do |t|

@@ -11,7 +11,7 @@ module BuyerSubscription
   def self.subscription_features_usage(plan_id, buyer_id)
     subscription = Subscription.find_by(buyer_id: buyer_id, plan_id: plan_id)
     feature_ids = Plan.find(plan_id).features.pluck(:id)
-    return feature_ids, subscription.id
+    [feature_ids, subscription.id]
   end
 
   def insert_features_usage(subscription_data)
@@ -35,9 +35,7 @@ module BuyerSubscription
       usage_limit[f_id] = Feature.find(f_id).max_unit_limit
     end
     overcharge = calculate_price(params, usage_limit)
-    if(overcharge > 0)
-      update_stripe_plan(plan, overcharge)
-    end
+    update_stripe_plan(plan, overcharge) if overcharge.positive?
   end
 
   def self.calculate_price(params, usage_limit)
@@ -48,16 +46,16 @@ module BuyerSubscription
         overcharge += exceeded_units * Feature.find(key.to_i).unit_price
       end
     end
-    return overcharge
+    overcharge
   end
 
   def self.update_stripe_plan(plan, overcharge)
-    stripe_plan = StripePlan.new(name: "#{plan.name} extended_#{rand(1..1000)}", price_cents: (plan.monthly_fee + overcharge)*100)
+    stripe_plan = StripePlan.new(name: "#{plan.name} extended_#{rand(1..1000)}",
+                                 price_cents: (plan.monthly_fee + overcharge) * 100)
     stripe_plan.save
 
     s_plan = StripePlan.find_by(name: plan.name)
     s_subscription = StripeSubscription.find_by(stripe_plan_id: s_plan.id)
     s_subscription.update_subscription(stripe_plan.stripe_price_id, s_subscription.stripe_id)
   end
-
 end

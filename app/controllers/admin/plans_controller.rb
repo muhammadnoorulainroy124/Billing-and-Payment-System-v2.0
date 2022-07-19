@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class Admin::PlansController < ApplicationController
   require 'stripe'
   include PlansUtilityModule
   layout 'admin'
-  before_action :set_plan, only: %i[show edit update destroy]
+  before_action :set_plan, only: %i[show destroy]
   before_action :authenticate_user!
 
   def index
@@ -30,7 +32,7 @@ class Admin::PlansController < ApplicationController
       charges = PlansUtilityModule.calculate_monthly_charges(params[:plan][:feature_ids])
       @plan = Plan.new(plan_params.merge!(monthly_fee: charges))
       authorize @plan
-      @stripe_plan = StripePlan.new(stripe_plan_params.merge!(name: params[:plan][:name], price_cents: charges*100))
+      @stripe_plan = StripePlan.new(stripe_plan_params.merge!(name: params[:plan][:name], price_cents: charges * 100))
 
       respond_to do |format|
         if @plan.save
@@ -45,8 +47,9 @@ class Admin::PlansController < ApplicationController
 
   def destroy
     authorize @plan
-    StripePlan.find_by(name: @plan.name).destroy
+    plan_name = @plan.name
     @plan.destroy
+    StripePlan.find_by(name: plan_name).destroy
 
     respond_to do |format|
       format.html { redirect_to admin_plans_url, notice: 'Plan was successfully deleted.' }
@@ -67,4 +70,3 @@ class Admin::PlansController < ApplicationController
     params.permit(:name, :price_cents)
   end
 end
-

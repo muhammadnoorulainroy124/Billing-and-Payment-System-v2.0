@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateStripePlans < ActiveRecord::Migration[5.2]
   def change
     create_table :stripe_plans do |t|

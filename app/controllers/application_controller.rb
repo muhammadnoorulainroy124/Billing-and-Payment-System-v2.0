@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -39,7 +40,12 @@ class ApplicationController < ActionController::Base
   end
 
   def user_not_authorized
-    flash[:error] = "You are not authorized to perform this action."
+    flash[:error] = 'You are not authorized to perform this action.'
+    redirect_to request.referer || root_path
+  end
+
+  def invalid_foreign_key
+    flash[:error] = 'Cannot perform this action at the moment'
     redirect_to request.referer || root_path
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SubscriptionPolicy < ApplicationPolicy
   class Scope < Scope
     # NOTE: Be explicit about which records you allow access to!
@@ -17,11 +19,7 @@ class SubscriptionPolicy < ApplicationPolicy
   def create?
     @user.type == 'Buyer'
   end
-
-  def index?
-    @user.type == 'Buyer'
-  end
-
+  
   def show_usage?
     @user.type == 'Buyer'
   end
@@ -35,6 +33,6 @@ class SubscriptionPolicy < ApplicationPolicy
   end
 
   def destroy?
-    @user.type == "Buyer"
+    @user.type == 'Buyer'
   end
 end

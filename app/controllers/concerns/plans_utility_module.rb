@@ -14,13 +14,4 @@ module PlansUtilityModule
     end
     total
   end
-
-  def self.update_stripe_plan(plan)
-    s_plan = StripePlan.find_by(name: plan.name)
-    plans_plan.retrieve_stripe_reference_id
-    Stripe::Plan.update(
-      'price_1LMi78BHZ29CJnGhcszDJUZI',
-      {metadata: {order_id: '6735'}},
-    )
-  end
 end

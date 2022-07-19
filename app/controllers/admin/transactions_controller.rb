@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class Admin::TransactionsController < ApplicationController
   before_action :authenticate_user!
   layout 'admin'
 
   def index
-   @pagy, @transactions = pagy(Transaction.all, items: 5)
+    @pagy, @transactions = pagy(Transaction.all.order('transactions.created_at DESC'), items: 5)
     authorize @transactions
   end
 

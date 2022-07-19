@@ -64,11 +64,11 @@ end
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 gem 'bootstrap', '~> 4.4.1'
+gem 'cloudinary'
 gem 'devise'
 gem 'devise_invitable', '~> 2.0.0'
 gem 'jquery-rails'
+gem 'pagy'
+gem 'pundit'
 gem 'stripe'
 gem 'stripe_event'
-gem 'pundit'
-gem 'cloudinary'
-gem 'pagy'

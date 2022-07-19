@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StripeSubscription < ApplicationRecord
   attr_accessor :card_number, :exp_month, :exp_year, :cvc
 
@@ -15,23 +17,23 @@ class StripeSubscription < ApplicationRecord
       { source: generate_card_token }
     )
     response = Stripe::Subscription.create({
-      customer: user.stripe_id,
-      items: [
-        { price: stripe_plan.stripe_price_id }
-      ]
-    })
+                                             customer: user.stripe_id,
+                                             items: [
+                                               { price: stripe_plan.stripe_price_id }
+                                             ]
+                                           })
     self.stripe_id = response.id
   end
 
   def generate_card_token
     Stripe::Token.create({
-      card: {
-        number: card_number,
-        exp_month: exp_month,
-        exp_year: exp_year,
-        cvc: cvc
-      }
-    }).id
+                           card: {
+                             number: card_number,
+                             exp_month: exp_month,
+                             exp_year: exp_year,
+                             cvc: cvc
+                           }
+                         }).id
   end
 
   def update_subscription(price_id, subscription_id)
@@ -52,5 +54,4 @@ class StripeSubscription < ApplicationRecord
   def subscription_inactive?
     !active
   end
-
 end
