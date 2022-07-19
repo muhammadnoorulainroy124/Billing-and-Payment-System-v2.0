@@ -8,7 +8,7 @@ class Plan < ApplicationRecord
   has_many :users, through: :subscriptions
 
   validates :name, :monthly_fee, presence: true
-  validates :name, length: { minimum: 3, maximum: 20 }, name: true
+  validates :name, length: { minimum: 3, maximum: 20 }, name: true 
   validates :name, uniqueness: true
 
 end

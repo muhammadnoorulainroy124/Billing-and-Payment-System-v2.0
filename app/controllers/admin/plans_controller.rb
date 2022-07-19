@@ -23,7 +23,7 @@ class Admin::PlansController < ApplicationController
   end
 
   def create
-    if params[:plan][:feature_ids].length == 1
+    if params[:plan][:feature_ids].length == 1 #verify if at least one plan is selected for subscription
       flash[:error] = 'Please select at least one feature'
       redirect_to new_admin_plan_path
     else
