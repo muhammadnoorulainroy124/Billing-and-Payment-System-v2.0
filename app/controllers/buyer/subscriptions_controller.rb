@@ -49,10 +49,10 @@ class Buyer::SubscriptionsController < ApplicationController
 
   def destroy
     @subscription = Subscription.find_by(buyer_id: current_user.id, plan_id: params[:id])
-    authorize @subscription #pundit
+    authorize @subscription
     @plan = Plan.find(params[:id])
     @stripe_plan = StripePlan.find_by(name: @plan.name)
-    StripeSubscription.find_by(stripe_plan_id: @stripe_plan.id).update(active: false) #unsubscribe plan by setting active to false
+    StripeSubscription.find_by(stripe_plan_id: @stripe_plan.id).update(active: false)
     StripeSubscription.where(active: false).destroy_all
     Usage.where(subscription_id: @subscription.id).destroy_all
     @subscription.destroy
