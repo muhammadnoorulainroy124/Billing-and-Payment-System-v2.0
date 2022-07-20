@@ -1,6 +1,6 @@
 
 <div class="container">
-  <div class="card" style="width:700px">
+  <div class="card w-75 p-3">
     <div class="card-body">
     <% if card == "update"%>
       <h4 class="card-title">Updating Plan</h4>
@@ -28,7 +28,7 @@
 
          <div class="form-group">
            <%= form.label :name %>
-          <%= form.text_field :name, required: true, maxlength: 15, class:"form-control" %>
+          <%= form.text_field :name, required: true, maxlength: 15, size: 20, class:"form-control" %>
         </div>
 
         <div>

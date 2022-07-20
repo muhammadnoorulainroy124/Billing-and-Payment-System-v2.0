@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :features
     resources :plans
     resources :transactions, only: %i[index destroy]
+    resources :subscriptions, only: :index
   end
 
   scope :admin, as: 'admin' do

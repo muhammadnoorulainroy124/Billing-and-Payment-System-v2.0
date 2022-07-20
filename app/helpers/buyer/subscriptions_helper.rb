@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Buyer::SubscriptionsHelper
-
+  
   def not_subscribed_plans
     buyer_plans = current_user.plans
     Plan.left_joins(:subscriptions).where.not(id: buyer_plans)
@@ -21,8 +21,7 @@ module Buyer::SubscriptionsHelper
   end
 
   def subscription_features(subscription)
-    plan = Plan.find(subscription.plan_id)
-    plan.features
+    subscription.plan.features
   end
 
   def subscription_feature_usage(subscription, feature)
