@@ -3,7 +3,7 @@
   $('#usage-content').html("<%= j render 'usage_modal', subscription: @subscription%>");
   $('#usage-modal').modal('show');
   var usages = document.querySelectorAll(`[id^="subscription"]`)
-
+ 
   var feature_ids = {}
 
   for(let i=0; i < usages.length; i++){
