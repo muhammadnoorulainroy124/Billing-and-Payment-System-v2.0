@@ -8,7 +8,7 @@ class Feature < ApplicationRecord
   validates :name, :code, :max_unit_limit, :unit_price, presence: true
   validates :name, :code, uniqueness: true
   validates :code, length: { minimum: 3, maximum: 6 }
-  validates :name, length: { minimum: 3, maximum: 20 }, name: true
+  validates :name, length: { minimum: 3, maximum: 20 }, name: true 
 
 
 end

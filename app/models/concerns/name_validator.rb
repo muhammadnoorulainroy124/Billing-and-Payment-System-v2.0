@@ -11,5 +11,5 @@ class NameValidator < ActiveModel::EachValidator
 
   def all_letters(str)
     str[/[a-zA-Z]+/]  == str
-  end
+  end 
 end
