@@ -19,10 +19,10 @@ class Buyer::SubscriptionsController < ApplicationController
                                                                 buyer_id: current_user.id))
     authorize @subscription
     @stripe_subscrption = StripeSubscription.new(stripe_subscription_params.merge!(user_id: current_user.id,
-                                                                                    stripe_plan_id: BuyerSubscription.stripe_plan_id(params[:subscription][:plan_id]), active: true))
+                                                                                    stripe_plan_id: @subscription.stripe_plan_id, active: true))
     ActiveRecord::Base.transaction do
-      @stripe_subscrption.save
-      @subscription.save
+      @stripe_subscrption.save!
+      @subscription.save!
       create_usage
       flash[:success] = 'Plan subscribed successfully.'
       redirect_to buyer_subscriptions_path
@@ -33,7 +33,7 @@ class Buyer::SubscriptionsController < ApplicationController
   end
 
   def show_usage
-    @subscription = Subscription.find_by(plan_id: params[:id], buyer_id: current_user.id)
+    @subscription = current_user.find_by(plan_id: params[:id])
     authorize @subscription
     respond_to do |format|
       format.js
