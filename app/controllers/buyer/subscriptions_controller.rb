@@ -2,6 +2,7 @@
 
 class Buyer::SubscriptionsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_subscription, on: %i[:show_usage]
   include BuyerSubscription
   require 'date'
   layout 'buyer'
@@ -15,25 +16,21 @@ class Buyer::SubscriptionsController < ApplicationController
   end
 
   def create
-    @subscription = Subscription.new(subscription_params.merge!(billing_day: Time.zone.today,
-                                                                buyer_id: current_user.id))
+    @subscription = Subscription.new(subscription_params.merge!(billing_day: Time.zone.today, buyer_id: current_user.id))
     authorize @subscription
-    @stripe_subscrption = StripeSubscription.new(stripe_subscription_params.merge!(user_id: current_user.id,
-                                                                                    stripe_plan_id: BuyerSubscription.stripe_plan_id(params[:subscription][:plan_id]), active: true))
+    @stripe_subscription = StripeSubscription.new(stripe_subscription_params.merge!(user_id: current_user.id, stripe_plan_id: @subscription.stripe_plan_id, active: true))
     ActiveRecord::Base.transaction do
-      @stripe_subscrption.save
-      @subscription.save
-      create_usage
+      @stripe_subscription.save!
+      @subscription.save!
       flash[:success] = 'Plan subscribed successfully.'
       redirect_to buyer_subscriptions_path
     rescue StandardError => e
-      flash[:error] = e.error.message
+      flash[:error] = e.message
       render :new
     end
   end
 
   def show_usage
-    @subscription = Subscription.find_by(plan_id: params[:id], buyer_id: current_user.id)
     authorize @subscription
     respond_to do |format|
       format.js
@@ -81,13 +78,7 @@ class Buyer::SubscriptionsController < ApplicationController
     params.permit(:card_number, :cvc, :exp_month, :exp_year)
   end
 
-  def usage_params
-    params.permit(:subscription_id, feature_id: [])
-  end
-
-  def create_usage
-    subscription_data = BuyerSubscription.subscription_features_usage(params[:subscription][:plan_id],
-                                                                      current_user.id)
-    insert_features_usage(subscription_data)
+  def set_subscription
+    @subscription = Subscription.find_by(plan_id: params[:id], buyer_id: current_user.id)
   end
 end

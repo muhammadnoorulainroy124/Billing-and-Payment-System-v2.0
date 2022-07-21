@@ -29,14 +29,11 @@ class Admin::PlansController < ApplicationController
       flash[:error] = 'Please select at least one feature'
       redirect_to new_admin_plan_path
     else
-      charges = PlansUtilityModule.calculate_monthly_charges(params[:plan][:feature_ids])
-      @plan = Plan.new(plan_params.merge!(monthly_fee: charges))
+      @plan = Plan.new(plan_params)
       authorize @plan
-      @stripe_plan = StripePlan.new(stripe_plan_params.merge!(name: params[:plan][:name], price_cents: charges * 100))
 
       respond_to do |format|
-        if @plan.save
-          @stripe_plan.save
+        if @plan.save!
           format.html { redirect_to admin_plans_url notice: 'Plan was successfully created.' }
         else
           format.html { render :new }
@@ -47,9 +44,7 @@ class Admin::PlansController < ApplicationController
 
   def destroy
     authorize @plan
-    plan_name = @plan.name
     @plan.destroy
-    StripePlan.find_by(name: plan_name).destroy
 
     respond_to do |format|
       format.html { redirect_to admin_plans_url, notice: 'Plan was successfully deleted.' }
@@ -63,10 +58,7 @@ class Admin::PlansController < ApplicationController
   end
 
   def plan_params
-    params.require(:plan).permit(:name, :monthly_fee, feature_ids: [])
+    params.require(:plan).permit(:name, feature_ids: [])
   end
 
-  def stripe_plan_params
-    params.permit(:name, :price_cents)
-  end
 end
