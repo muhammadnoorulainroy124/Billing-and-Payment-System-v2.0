@@ -10,7 +10,7 @@ module StripeServices
     end
 
     def call
-      Stripe::Subscription.delete(@stripe_id)
+      Stripe::Subscription.delete(@stripe_id) 
     end
   end
 end

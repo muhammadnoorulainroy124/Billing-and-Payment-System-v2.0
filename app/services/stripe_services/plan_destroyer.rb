@@ -9,10 +9,7 @@ module StripeServices
       @stripe_price_id = stripe_price_id
     end
 
-    def call
-      Stripe::Plan.delete(
-        stripe_price_id
-      )
+    def call Stripe::Plan.delete(stripe_price_id)
     end
   end
 end

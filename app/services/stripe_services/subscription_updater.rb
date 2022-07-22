@@ -11,14 +11,7 @@ module StripeServices
     end
 
     def call
-      Stripe::Subscription.update(
-        @subscription_id,
-        {
-          items: [
-            { price: @price_id }
-          ]
-        }
-      )
+      Stripe::Subscription.update( @subscription_id, { items: [{ price: @price_id }]} )
     end
   end
 end

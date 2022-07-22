@@ -11,12 +11,7 @@ module StripeServices
     end
 
     def call
-      Stripe::Subscription.create({
-                                    customer: @user_stripe_id,
-                                    items: [
-                                      { price: @stripe_plan_price_id }
-                                    ]
-                                  })
+      Stripe::Subscription.create({customer: @user_stripe_id, items: [{ price: @stripe_plan_price_id }]})
     end
   end
 end

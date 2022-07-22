@@ -11,12 +11,7 @@ module StripeServices
     end
 
     def call
-      Stripe::Price.create({
-                             unit_amount: @price_cents,
-                             currency: 'usd',
-                             recurring: { interval: 'month' },
-                             product_data: { name: @name }
-                           })
+      Stripe::Price.create({unit_amount: @price_cents, currency: 'usd', recurring: { interval: 'month' }, product_data: { name: @name }})
     end
   end
 end

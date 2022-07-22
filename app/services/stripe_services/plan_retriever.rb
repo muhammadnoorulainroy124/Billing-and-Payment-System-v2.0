@@ -10,7 +10,7 @@ module StripeServices
     end
 
     def call
-      Stripe::Price.retrieve(stripe_price_id)
+      Stripe::Price.retrieve(stripe_price_id) 
     end
   end
 end
