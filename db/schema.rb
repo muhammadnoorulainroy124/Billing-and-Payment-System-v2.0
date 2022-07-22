@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_18_222901) do
+ActiveRecord::Schema.define(version: 2022_07_22_013845) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -65,22 +65,25 @@ ActiveRecord::Schema.define(version: 2022_07_18_222901) do
   end
 
   create_table "stripe_plans", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "description"
     t.integer "interval"
-    t.integer "price_cents"
-    t.string "stripe_price_id"
+    t.integer "price_cents", null: false
+    t.string "stripe_price_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_stripe_plans_on_name", unique: true
+    t.index ["stripe_price_id"], name: "index_stripe_plans_on_stripe_price_id", unique: true
   end
 
   create_table "stripe_subscriptions", force: :cascade do |t|
     t.bigint "stripe_plan_id"
     t.bigint "user_id"
     t.boolean "active", default: true
-    t.string "stripe_id"
+    t.string "stripe_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["stripe_id"], name: "index_stripe_subscriptions_on_stripe_id", unique: true
     t.index ["stripe_plan_id"], name: "index_stripe_subscriptions_on_stripe_plan_id"
     t.index ["user_id"], name: "index_stripe_subscriptions_on_user_id"
   end
@@ -139,6 +142,7 @@ ActiveRecord::Schema.define(version: 2022_07_18_222901) do
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
     t.index ["invited_by_type", "invited_by_id"], name: "index_users_on_invited_by_type_and_invited_by_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["stripe_id"], name: "index_users_on_stripe_id", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

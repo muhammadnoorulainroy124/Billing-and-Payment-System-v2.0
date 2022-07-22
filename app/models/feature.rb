@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Feature < ApplicationRecord
-  has_many :feature_plans
+  has_many :feature_plans, dependent: nil
   has_many :plans, through: :feature_plans
 
   validates :name, :code, :max_unit_limit, :unit_price, presence: true

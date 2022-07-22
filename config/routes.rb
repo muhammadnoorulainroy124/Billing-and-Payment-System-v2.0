@@ -1,22 +1,22 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
-  namespace :admin do
+  namespace :admin_user, as: 'admin' do
     resources :features
     resources :plans
     resources :transactions, only: %i[index destroy]
     resources :subscriptions, only: :index
   end
 
-  scope :admin, as: 'admin' do
-    root 'admin/features#index'
+  scope :admin_user, as: 'admin' do
+    root 'admin_user/features#index'
   end
 
-  scope :buyer, as: 'buyer' do
-    root 'buyer/subscriptions#index'
+  scope :buyer_user, as: 'buyer' do
+    root 'buyer_user/subscriptions#index'
   end
 
-  namespace :buyer do
+  namespace :buyer_user, as: 'buyer' do
     resources :subscriptions do
       member do
         get 'show_usage'

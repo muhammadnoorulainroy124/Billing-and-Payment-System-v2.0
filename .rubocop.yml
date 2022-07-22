@@ -31,3 +31,6 @@ Lint/AmbiguousBlockAssociation:
 
 Style/Documentation:
   Enabled: false
+
+Rails/FilePath:
+  Enabled: false

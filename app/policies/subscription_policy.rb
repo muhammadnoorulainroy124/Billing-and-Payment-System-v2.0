@@ -19,7 +19,7 @@ class SubscriptionPolicy < ApplicationPolicy
   def create?
     @user.type == 'Buyer'
   end
-  
+
   def show_usage?
     @user.type == 'Buyer'
   end
