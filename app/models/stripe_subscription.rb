@@ -12,43 +12,17 @@ class StripeSubscription < ApplicationRecord
   before_update :cancel_stripe_subscription, if: :subscription_inactive?
 
   def create_stripe_reference
-    Stripe::Customer.create_source(
-      user.stripe_id,
-      { source: generate_card_token }
-    )
-    response = Stripe::Subscription.create({
-                                             customer: user.stripe_id,
-                                             items: [
-                                               { price: stripe_plan.stripe_price_id }
-                                             ]
-                                           })
+    StripeServices::CardTokenCreator.call(user.stripe_id, card_number, exp_month, exp_year, cvc)
+    response = StripeServices::SubscriptionCreator.call(user.stripe_id, stripe_plan.stripe_price_id)
     self.stripe_id = response.id
   end
 
-  def generate_card_token
-    Stripe::Token.create({
-                           card: {
-                             number: card_number,
-                             exp_month: exp_month,
-                             exp_year: exp_year,
-                             cvc: cvc
-                           }
-                         }).id
-  end
-
   def update_subscription(price_id, subscription_id)
-    Stripe::Subscription.update(
-      subscription_id,
-      {
-        items: [
-          { price: price_id }
-        ]
-      }
-    )
+    StripeServices::SubscriptionUpdater.call(price_id, subscription_id)
   end
 
   def cancel_stripe_subscription
-    Stripe::Subscription.delete(stripe_id)
+    StripeServices::SubscriptionCanceller.call(stripe_id)
   end
 
   def subscription_inactive?
