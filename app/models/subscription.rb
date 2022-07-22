@@ -26,10 +26,9 @@ class Subscription < ApplicationRecord
 
   def update_usage(data)
     data[:subscription].each do |key, value|
-      Usage.where(subscription_id: self.id, feature_id: key).update(usage: value)
+      Usage.where(subscription_id: id, feature_id: key).update(usage: value)
     end
   end
-
 
   private
 
@@ -46,7 +45,7 @@ class Subscription < ApplicationRecord
   end
 
   def subscription_features_usage
-    subs = Subscription.find_by(buyer_id: self.buyer_id, plan_id: plan_id)
+    subs = Subscription.find_by(buyer_id: buyer_id, plan_id: plan_id)
     feature_ids = Plan.find(plan_id).features.pluck(:id)
     [feature_ids, subs.id]
   end
@@ -76,6 +75,6 @@ class Subscription < ApplicationRecord
     stripe_plan = StripePlan.find_by(name: plan.name)
     StripeSubscription.find_by(stripe_plan_id: stripe_plan.id).update(active: false)
     StripeSubscription.where(active: false).destroy_all
-    Usage.where(subscription_id: self.id).destroy_all
+    Usage.where(subscription_id: id).destroy_all
   end
 end

@@ -12,22 +12,15 @@ class StripePlan < ApplicationRecord
   before_destroy :delete_stripe_plan
 
   def create_stripe_reference
-    response = Stripe::Price.create({
-                                      unit_amount: price_cents,
-                                      currency: 'usd',
-                                      recurring: { interval: 'month' },
-                                      product_data: { name: name }
-                                    })
+    response = StripeServices::PlanCreator.call(price_cents, name)
     self.stripe_price_id = response.id
   end
 
   def retrieve_stripe_reference
-    Stripe::Price.retrieve(stripe_price_id)
+    StripeServices::PlanRetriever.call(stripe_price_id)
   end
 
   def delete_stripe_plan
-    Stripe::Plan.delete(
-      stripe_price_id
-    )
+    StripeServices::PlanDestroyer.call(stripe_price_id)
   end
 end

@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 
 class ChangeFeatureTable < ActiveRecord::Migration[5.2]
-  def change
-    change_table :features do |t|
-      t.change :code, :string
-    end
+  def up
+    change_column :features, :code, :string
+  end
+
+  def down
+    change_column :features, :code, :integer
   end
 end

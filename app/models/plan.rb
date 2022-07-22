@@ -6,7 +6,7 @@ class Plan < ApplicationRecord
   has_many :feature_plans, dependent: :destroy
   has_many :features, through: :feature_plans
 
-  has_many :subscriptions
+  has_many :subscriptions, dependent: nil
   has_many :users, through: :subscriptions
 
   validates :name, :monthly_fee, presence: true
@@ -14,28 +14,40 @@ class Plan < ApplicationRecord
   validates :name, uniqueness: true
 
   before_validation :create_monthly_charges, on: :create
-  after_create :create_stripe_plan
+  after_create :create_stripe_plan, :create_feature_plan
   after_destroy :destroy_stripe_plan
 
   private
 
   def create_monthly_charges
-    total = 0
-      feature_ids.each do |index|
-        next if index == ''
+    unless feature_ids.nil?
+      total = 0
+        feature_ids.each do |index|
+          next if index == ''
 
-        price = Feature.where('id = ?', index.to_i).pluck(:unit_price)
+          price = Feature.where('id = ?', index.to_i).pluck(:unit_price)
 
-        total += price.first
-      end
+          total += price.first
+        end
       self.monthly_fee = total
+    end
   end
 
   def create_stripe_plan
-    StripePlan.create(name: self.name, price_cents: self.monthly_fee * 100)
+    StripePlan.create(name: name, price_cents: monthly_fee * 100)
   end
 
   def destroy_stripe_plan
-    StripePlan.find_by(name: self.name).destroy
+    StripePlan.find_by(name: name).destroy
+  end
+
+  def create_feature_plan
+    unless feature_ids.nil?
+      feature_ids.each do |f_id|
+        next if f_id == ''
+
+        FeaturePlan.create(plan_id: id, feature_id: f_id)
+      end
+    end
   end
 end
