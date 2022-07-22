@@ -22,13 +22,13 @@ class Plan < ApplicationRecord
   def create_monthly_charges
     unless feature_ids.nil?
       total = 0
-        feature_ids.each do |index|
-          next if index == ''
+      feature_ids.each do |index|
+        next if index == ''
 
-          price = Feature.where('id = ?', index.to_i).pluck(:unit_price)
+        price = Feature.where('id = ?', index.to_i).pluck(:unit_price)
 
-          total += price.first
-        end
+        total += price.first
+      end
       self.monthly_fee = total
     end
   end
@@ -42,12 +42,10 @@ class Plan < ApplicationRecord
   end
 
   def create_feature_plan
-    unless feature_ids.nil?
-      feature_ids.each do |f_id|
-        next if f_id == ''
+    feature_ids&.each do |f_id|
+      next if f_id == ''
 
-        FeaturePlan.create(plan_id: id, feature_id: f_id)
-      end
+      FeaturePlan.create(plan_id: id, feature_id: f_id)
     end
   end
 end
