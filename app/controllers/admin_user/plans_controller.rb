@@ -38,8 +38,7 @@ module AdminUser
 
     def destroy
       @plan.destroy
-      flash[:success] = 'Plan was successfully deleted.'
-      redirect_to admin_plans_url
+      redirect_to admin_plans_url, flash: { success: 'Plan was successfully deleted.' }
     end
 
     private

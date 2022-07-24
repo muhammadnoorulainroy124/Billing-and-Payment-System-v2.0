@@ -27,31 +27,24 @@ module AdminUser
     def create
       @feature = Feature.new(create_feature_params)
       authorize @feature
-      respond_to do |format|
-        if @feature.save
-          format.html { redirect_to admin_features_url, notice: 'Feature was successfully created.' }
-        else
-          format.html { render :new }
-        end
+      if @feature.save
+        redirect_to admin_features_url, flash: { success: 'Feature was successfully created.' }
+      else
+        ender :new
       end
     end
 
     def update
-      respond_to do |format|
-        if @feature.update(update_feature_params)
-          format.html { redirect_to admin_features_url, notice: 'Feature was successfully updated.' }
-        else
-          format.html { render :edit }
-        end
+      if @feature.update(update_feature_params)
+        redirect_to admin_features_url, flash: { success: 'Feature was successfully updated.' }
+      else
+        render :edit
       end
     end
 
     def destroy
       @feature.destroy
-
-      respond_to do |format|
-        format.html { redirect_to admin_features_url, notice: 'Feature was successfully deleted.' }
-      end
+      redirect_to admin_features_url, flash: { success: 'Feature was successfully deleted.' }
     end
 
     private

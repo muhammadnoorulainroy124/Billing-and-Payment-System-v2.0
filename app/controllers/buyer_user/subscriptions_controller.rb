@@ -30,50 +30,45 @@ module BuyerUser
     def increase_usage
       @subscription.verify_usage_limit(params)
       @subscription.update_usage(params)
-      flash[:success] = 'Usage has been updated successfully'
-      redirect_to buyer_subscriptions_path
+      redirect_to buyer_subscriptions_path, flash: { success: 'Usage has been updated successfully' }
     end
 
     def destroy
       @subscription.destroy
-
-      respond_to do |format|
-        format.html { redirect_to buyer_subscriptions_url, notice: 'Plan was unsubscribed successfully.' }
-      end
+      redirect_to buyer_subscriptions_url, flash: { success: 'Plan was unsubscribed successfully.' }
     end
+  end
 
-    def max_limit
-      @feature_ids = params[:f_ids]
-      respond_to do |format|
-        format.js { render 'show_usage' }
-      end
+  def max_limit
+    @feature_ids = params[:f_ids]
+    respond_to do |format|
+      format.js { render 'show_usage' }
     end
+  end
 
-    private
+  private
 
-    def subscription_params
-      params.require(:subscription).permit(:buyer_id, :billing_day, :plan_id)
-    end
+  def subscription_params
+    params.require(:subscription).permit(:buyer_id, :billing_day, :plan_id)
+  end
 
-    def stripe_subscription_params
-      params.permit(:card_number, :cvc, :exp_month, :exp_year)
-    end
+  def stripe_subscription_params
+    params.permit(:card_number, :cvc, :exp_month, :exp_year)
+  end
 
-    def set_subscription
-      @subscription = Subscription.find_by(plan_id: params[:id], buyer_id: current_user.id)
-      authorize @subscription
-    end
+  def set_subscription
+    @subscription = Subscription.find_by(plan_id: params[:id], buyer_id: current_user.id)
+    authorize @subscription
+  end
 
-    def perform_transaction(subscription, stripe_subscription)
-      ActiveRecord::Base.transaction do
-        stripe_subscription.save!
-        subscription.save!
-        flash[:success] = 'Plan subscribed successfully.'
-        redirect_to buyer_subscriptions_path
-      rescue StandardError => e
-        flash[:error] = e.message
-        render :new
-      end
+  def perform_transaction(subscription, stripe_subscription)
+    ActiveRecord::Base.transaction do
+      stripe_subscription.save!
+      subscription.save!
+      redirect_to buyer_subscriptions_path, flash: { success: 'Plan subscribed successfully.' }
+    rescue StandardError => e
+      flash[:error] = e.message
+      render :new
     end
   end
 end

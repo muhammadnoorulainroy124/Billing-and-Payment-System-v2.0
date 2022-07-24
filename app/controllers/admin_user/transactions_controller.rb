@@ -12,8 +12,7 @@ module AdminUser
 
     def destroy
       @transaction.destroy
-      flash[:success] = 'Transaction deleted successfully'
-      redirect_to admin_transactions_path
+      redirect_to admin_transactions_path, flash: { success: 'Transaction deleted successfully' }
     end
 
     private
