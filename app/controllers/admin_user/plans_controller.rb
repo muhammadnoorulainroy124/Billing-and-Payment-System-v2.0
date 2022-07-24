@@ -12,7 +12,6 @@ module AdminUser
     end
 
     def show
-      authorize @plan
       respond_to do |format|
         format.js
       end
@@ -38,7 +37,6 @@ module AdminUser
     end
 
     def destroy
-      authorize @plan
       @plan.destroy
       flash[:success] = 'Plan was successfully deleted.'
       redirect_to admin_plans_url
@@ -48,6 +46,7 @@ module AdminUser
 
     def set_plan
       @plan = Plan.find(params[:id])
+      authorize @plan
     end
 
     def plan_params

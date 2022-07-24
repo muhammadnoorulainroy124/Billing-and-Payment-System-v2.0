@@ -22,14 +22,12 @@ module BuyerUser
     end
 
     def show_usage
-      authorize @subscription
       respond_to do |format|
         format.js
       end
     end
 
     def increase_usage
-      authorize @subscription
       @subscription.verify_usage_limit(params)
       @subscription.update_usage(params)
       flash[:success] = 'Usage has been updated successfully'
@@ -37,7 +35,6 @@ module BuyerUser
     end
 
     def destroy
-      authorize @subscription
       @subscription.destroy
 
       respond_to do |format|
@@ -64,6 +61,7 @@ module BuyerUser
 
     def set_subscription
       @subscription = Subscription.find_by(plan_id: params[:id], buyer_id: current_user.id)
+      authorize @subscription
     end
 
     def perform_transaction(subscription, stripe_subscription)

@@ -11,7 +11,6 @@ module AdminUser
     end
 
     def destroy
-      authorize @transaction
       @transaction.destroy
       flash[:success] = 'Transaction deleted successfully'
       redirect_to admin_transactions_path
@@ -21,6 +20,7 @@ module AdminUser
 
     def set_transaction
       @transaction = Transaction.find(params[:id])
+      authorize @transaction
     end
   end
 end

@@ -20,17 +20,17 @@ class Plan < ApplicationRecord
   private
 
   def create_monthly_charges
-    unless feature_ids.nil?
-      total = 0
-      feature_ids.each do |index|
-        next if index == ''
+    return if feature_ids.nil?
 
-        price = Feature.where('id = ?', index.to_i).pluck(:unit_price)
+    total = 0
+    feature_ids.each do |index|
+      next if index == ''
 
-        total += price.first
-      end
-      self.monthly_fee = total
+      price = Feature.where('id = ?', index.to_i).pluck(:unit_price)
+
+      total += price.first
     end
+    self.monthly_fee = total
   end
 
   def create_stripe_plan

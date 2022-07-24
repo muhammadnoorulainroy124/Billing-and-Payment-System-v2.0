@@ -12,7 +12,6 @@ module AdminUser
     end
 
     def show
-      authorize @feature
       respond_to do |format|
         format.js
       end
@@ -23,9 +22,7 @@ module AdminUser
       authorize @feature
     end
 
-    def edit
-      authorize @feature
-    end
+    def edit; end
 
     def create
       @feature = Feature.new(create_feature_params)
@@ -40,7 +37,6 @@ module AdminUser
     end
 
     def update
-      authorize @feature
       respond_to do |format|
         if @feature.update(update_feature_params)
           format.html { redirect_to admin_features_url, notice: 'Feature was successfully updated.' }
@@ -51,7 +47,6 @@ module AdminUser
     end
 
     def destroy
-      authorize @feature
       @feature.destroy
 
       respond_to do |format|
@@ -63,6 +58,7 @@ module AdminUser
 
     def set_feature
       @feature = Feature.find(params[:id])
+      authorize @feature
     end
 
     def create_feature_params
