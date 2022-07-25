@@ -23,23 +23,18 @@ module AdminUser
     end
 
     def create
-      if params[:plan][:feature_ids].length == 1
-        redirect_to new_admin_plan_path, flash: { error: 'Please select at least one feature' }
+      @plan = Plan.new(plan_params)
+      authorize @plan
+      if @plan.save!
+        redirect_to admin_plans_url, flash: { success: 'Plan created successfully' }
       else
-        @plan = Plan.new(plan_params)
-        authorize @plan
-        if @plan.save!
-          redirect_to admin_plans_url, flash: { success: 'Plan created successfully' }
-        else
-          render :new
-        end
+        render :new
       end
     end
 
     def destroy
       @plan.destroy
-      flash[:success] = 'Plan was successfully deleted.'
-      redirect_to admin_plans_url
+      redirect_to admin_plans_url, flash: { success: 'Plan was successfully deleted.' }
     end
 
     private

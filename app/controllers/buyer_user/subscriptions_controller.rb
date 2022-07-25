@@ -30,16 +30,12 @@ module BuyerUser
     def increase_usage
       @subscription.verify_usage_limit(params)
       @subscription.update_usage(params)
-      flash[:success] = 'Usage has been updated successfully'
-      redirect_to buyer_subscriptions_path
+      redirect_to buyer_subscriptions_path, flash: { success: 'Usage has been updated successfully' }
     end
 
     def destroy
       @subscription.destroy
-
-      respond_to do |format|
-        format.html { redirect_to buyer_subscriptions_url, notice: 'Plan was unsubscribed successfully.' }
-      end
+      redirect_to buyer_subscriptions_url, flash: { success: 'Plan was unsubscribed successfully.' }
     end
 
     def max_limit
@@ -61,15 +57,14 @@ module BuyerUser
 
     def set_subscription
       @subscription = Subscription.find_by(plan_id: params[:id], buyer_id: current_user.id)
-      authorize @subscription
+      authorize @subscription unless @subscription.nil?
     end
 
     def perform_transaction(subscription, stripe_subscription)
       ActiveRecord::Base.transaction do
         stripe_subscription.save!
         subscription.save!
-        flash[:success] = 'Plan subscribed successfully.'
-        redirect_to buyer_subscriptions_path
+        redirect_to buyer_subscriptions_path, flash: { success: 'Plan subscribed successfully.' }
       rescue StandardError => e
         flash[:error] = e.message
         render :new
