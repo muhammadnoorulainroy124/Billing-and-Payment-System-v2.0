@@ -20,4 +20,5 @@
 //= require turbolinks
 //= require login
 //= require subscribe_plan
+//= require plan
 
