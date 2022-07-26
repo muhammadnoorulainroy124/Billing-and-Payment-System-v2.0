@@ -14,11 +14,11 @@ class User < ApplicationRecord
   before_validation :create_stripe_reference, on: %i[create update]
 
   def create_stripe_reference
-    response = Stripe::Customer.create(email: email)
+    response = StripeServices::CustomerCreator.call(email)
     self.stripe_id = response.id
   end
 
   def retrieve_stripe_reference
-    Stripe::Customer.retrieve(stripe_id)
+    StripeServices::CustomerRetriever.call(stripe_id)
   end
 end
