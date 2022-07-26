@@ -3,8 +3,10 @@
 module BuyerUser
   class SubscriptionsController < ApplicationController
     before_action :set_subscription, on: %i[show_usage increase_usage destroy]
+
     require 'date'
     layout 'buyer'
+
     def new
       @subscription = Subscription.new
       authorize @subscription
