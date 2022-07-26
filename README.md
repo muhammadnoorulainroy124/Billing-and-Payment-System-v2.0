@@ -4,10 +4,10 @@
 
 Billing and Recurring Payment is an web application where a Buyer can subscribe to any plan created by admin.
 
-#### Role of the Admin
+### Role of the Admin
 Admin can create features and set their price and maximum usage limit. They can also create various types of plans and add features to them. Price of the plan will be calculated automatically based upon the prices of features added to the plan. Admin can view all active subscriptions of buyers and histroy of all transactions.
 
-#### Role of the Buyer
+### Role of the Buyer
 Buyer can view all available plans for subscription along with their price and featrues included in it. Once the buyer selects a plan and clicks on the subscribe button, a modal shows up where buyer provides cerdit card information. Stripe validates the information. If credit card is valid, amount will be deducted from the card and subscription will be active. An invoice will be sent to the buyer through email.
 
 # Project Details
