@@ -36,7 +36,9 @@
           <hr />
         </div>
         <div class="form-group form-check">
-          <%= form.collection_check_boxes(:feature_ids, all_features, :id, :name) %>
+          <%= form.collection_check_boxes(:feature_ids, all_features, :id, :name) do |b| %>
+            <%= b.label(class:"mx-2 form-check-label") {b.check_box + b.text } %>
+          <% end %>
         </div>
 
        </div>
