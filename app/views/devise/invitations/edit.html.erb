@@ -38,5 +38,12 @@
         <%= f.submit "Sign Up as Buyer" %>
       </div>
     <% end %>
+
+    <%if resource.errors.any?%>
+      <div class="alert alert-danger">
+      <%= render "devise/shared/error_messages", resource: resource%>
+      </div>
+    <%end%>
+    
   </div>
 </div>

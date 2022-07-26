@@ -3,7 +3,6 @@
     <h2><%= t "devise.invitations.new.header" %></h2>
 
     <%= form_for(resource, as: resource_name, url: user_invitation_path, html: { method: :post }) do |f| %>
-      <%= render "devise/shared/error_messages", resource: resource %>
 
       <% resource.class.invite_key_fields.each do |field| -%>
         <div class="field">
@@ -16,5 +15,12 @@
         <%= f.submit t("devise.invitations.new.submit_button") %>
       </div>
     <% end %>
+
+    <%if resource.errors.any?%>
+      <div class="alert alert-danger">
+      <%= render "devise/shared/error_messages", resource: resource%>
+      </div>
+    <%end%>
+
   </div>
 </div>
