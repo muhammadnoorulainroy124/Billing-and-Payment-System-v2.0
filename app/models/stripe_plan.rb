@@ -21,6 +21,6 @@ class StripePlan < ApplicationRecord
   end
 
   def delete_stripe_plan
-    StripeServices::PlanDestroyer.call(stripe_price_id)
+    # StripeServices::PlanDestroyer.call(stripe_price_id)
   end
 end
