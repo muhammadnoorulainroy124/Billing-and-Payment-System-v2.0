@@ -15,7 +15,7 @@ class Plan < ApplicationRecord
 
   before_validation :create_monthly_charges, on: :create
   after_create :create_stripe_plan, :create_feature_plan
-  after_destroy :destroy_stripe_plan
+  # after_destroy :destroy_stripe_plan
 
   private
 

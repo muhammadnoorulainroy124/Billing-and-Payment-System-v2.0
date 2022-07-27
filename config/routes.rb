@@ -6,18 +6,11 @@ Rails.application.routes.draw do
     resources :plans
     resources :transactions, only: %i[index destroy]
     resources :subscriptions, only: :index
-  end
-
-  scope :admin_user, as: 'admin' do
-    root 'admin_user/features#index'
-  end
-
-  scope :buyer_user, as: 'buyer' do
-    root 'buyer_user/subscriptions#index'
+    root 'features#index'
   end
 
   namespace :buyer_user, as: 'buyer' do
-    resources :subscriptions do
+    resources :subscriptions, except: %i[show edit update] do
       member do
         get 'show_usage'
         patch 'increase_usage'
@@ -26,6 +19,7 @@ Rails.application.routes.draw do
         post 'max_limit'
       end
     end
+    root 'subscriptions#index'
   end
 
   devise_for :users
