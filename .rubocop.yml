@@ -1,7 +1,7 @@
 require:
   - rubocop-performance
   - rubocop-rails
-  #- rubocop-rspec # or rubocop-minitest
+  - rubocop-rspec # or rubocop-minitest
 
 
 AllCops:
@@ -15,10 +15,10 @@ AllCops:
     - 'bin/**/*'
 
 Layout/LineLength:
-  Max: 200
+  Max: 120
 
 Metrics/MethodLength:
-  Max: 30
+  Max: 23
 
 Metrics/BlockLength:
   Exclude:
@@ -30,7 +30,4 @@ Lint/AmbiguousBlockAssociation:
     - spec/**/*
 
 Style/Documentation:
-  Enabled: false
-
-Rails/FilePath:
   Enabled: false

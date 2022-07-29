@@ -63,7 +63,8 @@ class Subscription < ApplicationRecord
 
   def update_stripe_plan(overcharge)
     plan = Plan.find(plan_id)
-    stripe_plan = StripePlan.new(name: "#{plan.name} extended_#{rand(1..1000)}", price_cents: (plan.monthly_fee + overcharge) * 100)
+    stripe_plan = StripePlan.new(name: "#{plan.name} extended_#{rand(1..1000)}",
+                                 price_cents: (plan.monthly_fee + overcharge) * 100)
     stripe_plan.save
     s_plan = StripePlan.find_by(name: plan.name)
     s_subscription = StripeSubscription.find_by(stripe_plan_id: s_plan.id)

@@ -17,9 +17,11 @@ module BuyerUser
     end
 
     def create
-      @subscription = Subscription.new(subscription_params.merge!(billing_day: Time.zone.today, buyer_id: current_user.id))
+      @subscription = Subscription.new(subscription_params.merge!(billing_day: Time.zone.today,
+                                                                  buyer_id: current_user.id))
       authorize @subscription
-      @stripe_subscription = StripeSubscription.new(stripe_subscription_params.merge!(user_id: current_user.id, stripe_plan_id: @subscription.stripe_plan_id, active: true))
+      @stripe_subscription = StripeSubscription.new(stripe_subscription_params.merge!(user_id: current_user.id,
+                                                                                      stripe_plan_id: @subscription.stripe_plan_id, active: true))
       perform_transaction(@subscription, @stripe_subscription)
     end
 
