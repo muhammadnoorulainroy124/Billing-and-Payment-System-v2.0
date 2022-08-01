@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from ActiveRecord::InvalidForeignKey, with: :invalid_foreign_key
+  rescue_from Stripe::InvalidRequestError, with: :stripe_error
+  # rescue_from Exception, with: :rescue_exception
 
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!, unless: :devise_controller?
@@ -36,7 +38,7 @@ class ApplicationController < ActionController::Base
   private
 
   def record_not_found
-    flash[:error] = 'Something went wrong. Please try again.'
+    flash[:error] = 'Record not found.'
     redirect_to request.referer || root_path
   end
 
@@ -49,4 +51,14 @@ class ApplicationController < ActionController::Base
     flash[:error] = 'Cannot perform this action at the moment'
     redirect_to request.referer || root_path
   end
+
+  def stripe_error
+    flash[:error] = 'Stripe could not process your request. Please try again'
+    redirect_to request.referer || root_path
+  end
+
+  # def rescue_exception
+  #   flash[:error] = 'Something went wrong. Please try again'
+  #   redirect_to request.referer || root_path
+  # end
 end

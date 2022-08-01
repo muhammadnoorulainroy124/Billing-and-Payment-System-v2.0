@@ -7,17 +7,17 @@ class Plan < ApplicationRecord
   has_many :features, through: :feature_plans
 
   has_many :subscriptions, dependent: nil
-  has_many :users, through: :subscriptions
+  has_many :buyers, through: :subscriptions
 
   validates :name, :monthly_fee, presence: true
-  validates :name, length: { minimum: 3, maximum: 20 }, name: true
-  validates :name, uniqueness: true
+  validates :monthly_fee, numericality: { greater_than: 0, less_than: 100_000_000 }
+  validates :name, length: { minimum: 3, maximum: 20 }
+  validates :name, format: { with: /\A[a-zA-Z0-9\s]+\z/i, message: 'can only contain letters and numbers.' }
+  validates :name, uniqueness: { case_sensitive: false }
 
   before_validation :create_monthly_charges, on: :create
   after_create :create_stripe_plan, :create_feature_plan
   after_destroy :destroy_stripe_plan
-
-  private
 
   def create_monthly_charges
     return if feature_ids.nil?

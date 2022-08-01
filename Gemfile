@@ -41,6 +41,9 @@ gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'factory_bot_rails', '~> 6.2'
+  gem 'faker', '~> 1.6', '>= 1.6.6'
+  gem 'rspec-rails', '~> 5.0.0'
 end
 
 group :development do
@@ -58,6 +61,8 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
+  gem 'shoulda-callback-matchers', '~> 1.1.1'
+  gem 'shoulda-matchers'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -70,5 +75,7 @@ gem 'devise_invitable', '~> 2.0.0'
 gem 'jquery-rails'
 gem 'pagy'
 gem 'pundit'
+gem 'rails-controller-testing'
+gem 'simplecov', require: false, group: :test
 gem 'stripe'
 gem 'stripe_event'

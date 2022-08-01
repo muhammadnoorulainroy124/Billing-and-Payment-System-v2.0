@@ -6,7 +6,7 @@ module AdminUser
     before_action :set_transaction, only: %i[destroy]
 
     def index
-      @pagy, @transactions = pagy(Transaction.all.most_recent_transactions_first, items: 5)
+      @transactions = Transaction.all.most_recent_transactions_first
       authorize @transactions
     end
 

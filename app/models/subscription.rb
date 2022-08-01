@@ -21,12 +21,11 @@ class Subscription < ApplicationRecord
       usage_limit[f_id] = Feature.find(f_id).max_unit_limit
     end
     overcharge = calculate_overcharge(usage_limit, data)
-    update_stripe_plan(overcharge) if overcharge.positive?
   end
 
   def update_usage(data)
     data[:subscription].each do |key, value|
-      Usage.where(subscription_id: id, feature_id: key).update(usage: value)
+      Usage.where(subscription_id: id, feature_id: key.to_s.to_i).update(usage: value)
     end
   end
 
@@ -53,29 +52,17 @@ class Subscription < ApplicationRecord
   def calculate_overcharge(usage_limit, data)
     overcharge = 0
     data[:subscription].each do |key, value|
-      if value.to_i > usage_limit[key.to_i]
-        exceeded_units = value.to_i - usage_limit[key.to_i]
-        overcharge += exceeded_units * Feature.find(key.to_i).unit_price
+      if value.to_i > usage_limit[key.to_s.to_i]
+        exceeded_units = value.to_i - usage_limit[key.to_s.to_i]
+        overcharge += exceeded_units * Feature.find(key.to_s.to_i).unit_price
       end
     end
     overcharge
-  end
-
-  def update_stripe_plan(overcharge)
-    plan = Plan.find(plan_id)
-    stripe_plan = StripePlan.new(name: "#{plan.name} extended_#{rand(1..1000)}",
-                                 price_cents: (plan.monthly_fee + overcharge) * 100)
-    stripe_plan.save
-    s_plan = StripePlan.find_by(name: plan.name)
-    s_subscription = StripeSubscription.find_by(stripe_plan_id: s_plan.id)
-    s_subscription.update_subscription(stripe_plan.stripe_price_id, s_subscription.stripe_id)
   end
 
   def destroy_subscription_data
     plan = Plan.find(plan_id)
     stripe_plan = StripePlan.find_by(name: plan.name)
     StripeSubscription.find_by(stripe_plan_id: stripe_plan.id).update(active: false)
-    StripeSubscription.where(active: false).destroy_all
-    Usage.where(subscription_id: id).destroy_all
   end
 end

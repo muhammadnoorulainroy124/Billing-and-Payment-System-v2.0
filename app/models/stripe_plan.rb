@@ -4,7 +4,7 @@ class StripePlan < ApplicationRecord
   has_many :stripe_subscriptions, dependent: :destroy
 
   validates :name, :stripe_price_id, :price_cents, presence: true
-  validates :name, :stripe_price_id, uniqueness: true
+  validates :name, :stripe_price_id, uniqueness: { case_sensitive: false }
 
   enum interval: { month: 0 }
 

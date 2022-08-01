@@ -7,7 +7,7 @@ module AdminUser
     before_action :set_feature, only: %i[show edit update destroy]
 
     def index
-      @pagy, @features = pagy(Feature.all, items: 5)
+      @features = Feature.all
       authorize @features
     end
 
@@ -30,7 +30,7 @@ module AdminUser
       if @feature.save
         redirect_to admin_features_url, flash: { success: 'Feature was successfully created.' }
       else
-        ender :new
+        render :new
       end
     end
 
