@@ -11,7 +11,7 @@ class Buyer::SubscriptionsController < ApplicationController
   end
 
   def index
-    @pagy, @buyer_plans = pagy(current_user.plans, items: 5)
+    @pagy, @buyer_plans = pagy(current_user.plans, items: 10)
   end
 
   def create
