@@ -3,7 +3,7 @@ class Admin::TransactionsController < ApplicationController
   layout 'admin'
 
   def index
-    @transactions = Transaction.all
+   @pagy, @transactions = pagy(Transaction.all, items: 10)
     authorize @transactions
   end
 
